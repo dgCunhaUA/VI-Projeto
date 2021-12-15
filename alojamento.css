@@ -1,0 +1,24 @@
+.title {
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+    color: gray;
+}
+
+.d3-test {
+    text-align: center;
+    justify-content: center;
+}
+
+.graph {
+    width: 500px;
+    height: 100px;
+    margin-top: 50px;
+}
+
+.filters {
+    text-align: center;
+    margin-bottom: 30px;
+}
