@@ -1,24 +1,33 @@
 .title {
-    text-align: center;
+	margin-top: 40px;
+	text-align: center;
 }
 
 .subtitle {
-    text-align: center;
-    color: gray;
+	text-align: center;
+	color: gray;
 }
 
 .d3-test {
-    text-align: center;
-    justify-content: center;
+	text-align: center;
+	justify-content: center;
 }
 
 .graph {
-    width: 500px;
-    height: 100px;
-    margin-top: 50px;
+	width: 500px;
+	height: 100px;
+	margin-top: 50px;
 }
 
 .filters {
-    text-align: center;
-    margin-bottom: 30px;
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.bar {
+	fill: steelblue;
+}
+
+.bar-title {
+	font-size:smaller;
 }
