@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<title></title>
@@ -15,9 +15,10 @@
 			integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
 			crossorigin="anonymous"
 		/>
-		<link rel="stylesheet" href="alojamento.css" />
 		<script src="https://d3js.org/d3.v4.js"></script>
+		<link rel="stylesheet" href="receitas.css" />
 	</head>
+
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<div class="container-fluid">
@@ -47,12 +48,12 @@
 							>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link active" href="/alojamento.html"
+							<a class="nav-link" href="/alojamento.html"
 								>Alojamento</a
 							>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="/receitas.html"
+							<a class="nav-link active" href="/receitas.html"
 								>Receitas</a
 							>
 						</li>
@@ -100,7 +101,7 @@
 						id="region-select"
 					>
 						<option
-							value="files/viagens_grupo_etario_portugal.csv"
+							value="files/receitas_alojamento_portugal.csv"
 							selected
 							onclick="onSelect()"
 						>
@@ -130,8 +131,8 @@
 	<script>
 		// set the dimensions and margins of the graph
 		var margin = { top: 30, right: 30, bottom: 70, left: 60 },
-			width = 460 - margin.left - margin.right,
-			height = 400 - margin.top - margin.bottom;
+			width = 1000 - margin.left - margin.right,
+			height = 500 - margin.top - margin.bottom;
 
 		// append the svg object to the body of the page
 		var svg = d3
@@ -149,13 +150,14 @@
 		var x = d3.scaleBand().range([0, width]).padding(0.2);
 		var xAxis = svg
 			.append("g")
-			.attr("transform", "translate(0," + height + ")");
+			.attr("transform", "translate(0," + height + ")")
+			.attr("class", "myXaxis");
 
 		// Initialize the Y axis
 		var y = d3.scaleLinear().range([height, 0]);
 		var yAxis = svg.append("g").attr("class", "myYaxis");
 
-		let sortOrder = false;
+		let sortOrder = true;
 
 		// A function that create / update the plot for a given variable:
 		function update(selectedVar, filename, sortOrder) {
@@ -165,20 +167,22 @@
 				if (sortOrder != undefined) {
 					data.sort((a, b) => {
 						if (sortOrder) {
-							return d3.ascending(a[selectedVar], b[selectedVar]);
+							return d3.ascending(parseInt(a[selectedVar]), parseInt(b[selectedVar]));
 						} else {
 							return d3.descending(
-								a[selectedVar],
-								b[selectedVar]
+								parseInt(a[selectedVar]),
+								parseInt(b[selectedVar])
 							);
 						}
 					});
 				}
 
+				console.log(data);
+
 				// X axis
 				x.domain(
 					data.map(function (d) {
-						return d.group;
+						return d.type;
 					})
 				);
 				xAxis.transition().duration(1000).call(d3.axisBottom(x));
@@ -202,7 +206,7 @@
 					.transition()
 					.duration(1000)
 					.attr("x", function (d) {
-						return x(d.group);
+						return x(d.type);
 					})
 					.attr("y", function (d) {
 						return y(d[selectedVar]);
@@ -234,6 +238,6 @@
 		}
 
 		// Initialize plot
-		update("2020", "files/viagens_grupo_etario_portugal.csv", undefined);
+		update("2020", "files/receitas_alojamento_portugal.csv", undefined);
 	</script>
 </html>

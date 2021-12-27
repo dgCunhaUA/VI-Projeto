@@ -14,8 +14,6 @@
 }
 
 .graph {
-	width: 500px;
-	height: 100px;
 	margin-top: 50px;
 }
 
@@ -97,4 +95,9 @@ text.label {
 
 text.source {
 	font-size: 10px;
+}
+
+.myXaxis g text{
+    transform: rotate(-45deg);
+    text-anchor: end;
 }
