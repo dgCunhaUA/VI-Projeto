@@ -69,12 +69,16 @@
 
 		<div class="container">
 			<div class="title">
-				<h1>População residente que viajou em turismo</h1>
+				<h1>
+					Proveitos com dormidas nos alojamentos turísticos: total e
+					por tipo de estabelecimento
+				</h1>
 			</div>
 			<div class="subtitle">
 				<h4>
-					Onde há mais e menos pessoas a fazerem viagens turísticas,
-					por faixas etárias?
+					Quanto é o rendimento obtido com dormidas pelos hotéis,
+					apartamentos, aldeamentos turísticos, pelo turismo de
+					habitação, pelo turismo rural ou pelo alojamento local?
 				</h4>
 			</div>
 		</div>
@@ -107,12 +111,7 @@
 						>
 							Portugal
 						</option>
-						<option
-							value="files/viagens_grupo_etario_norte.csv"
-							onclick="onSelect()"
-						>
-							Norte
-						</option>
+						<option value="" onclick="onSelect()">Norte</option>
 						<option value="Centro">Centro</option>
 						<option value="Area">Area...</option>
 					</select>
@@ -130,7 +129,7 @@
 	</body>
 	<script>
 		// set the dimensions and margins of the graph
-		var margin = { top: 30, right: 30, bottom: 70, left: 60 },
+		var margin = { top: 30, right: 30, bottom: 70, left: 70 },
 			width = 1000 - margin.left - margin.right,
 			height = 500 - margin.top - margin.bottom;
 
@@ -159,15 +158,18 @@
 
 		let sortOrder = true;
 
-		// A function that create / update the plot for a given variable:
-		function update(selectedVar, filename, sortOrder) {
-			console.log("UPDATE: ", selectedVar, filename, sortOrder);
+		// A function that create / update_bar the plot for a given variable:
+		function update_bar(selectedVar, filename, sortOrder) {
+			console.log("update_bar: ", selectedVar, filename, sortOrder);
 			// Parse the Data
 			d3.csv(filename, function (data) {
 				if (sortOrder != undefined) {
 					data.sort((a, b) => {
 						if (sortOrder) {
-							return d3.ascending(parseInt(a[selectedVar]), parseInt(b[selectedVar]));
+							return d3.ascending(
+								parseInt(a[selectedVar]),
+								parseInt(b[selectedVar])
+							);
 						} else {
 							return d3.descending(
 								parseInt(a[selectedVar]),
@@ -199,7 +201,7 @@
 				// variable u: map data to existing bars
 				var u = svg.selectAll("rect").data(data);
 
-				// update bars
+				// update_bar bars
 				u.enter()
 					.append("rect")
 					.merge(u)
@@ -228,16 +230,16 @@
 			console.log("sort order: ", sortOrder);
 
 			sortOrder = !sortOrder;
-			update(year, region, sortOrder);
+			update_bar(year, region, sortOrder);
 		});
 
-		function onSelect(filename) {
+		function onSelect() {
 			var year = document.getElementById("year-select").value;
 			var region = document.getElementById("region-select").value;
-			update(year, region, undefined);
+			update_bar(year, region, undefined);
 		}
 
 		// Initialize plot
-		update("2020", "files/receitas_alojamento_portugal.csv", undefined);
+		update_bar("2020", "files/receitas_alojamento_portugal.csv", undefined);
 	</script>
 </html>
