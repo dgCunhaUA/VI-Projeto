@@ -124,18 +124,255 @@
 			</div>
 
 			<!-- Create a div where the graph will take place -->
-			<div id="my_dataviz"></div>
+			<div class="row">
+				<div id="linechart_div" class="col-9"></div>
+				<div class="col-3 checkboxes">
+					<div class="form-check">
+						<input
+							class="form-check-input"
+							type="checkbox"
+							value=""
+							id="total"
+							onclick="update_linechart('total')"
+							checked
+						/>
+						<label class="form-check-label" for="total">
+							Total
+						</label>
+					</div>
+					<div class="form-check">
+						<input
+							class="form-check-input"
+							type="checkbox"
+							value=""
+							id="hotel"
+							onclick="update_linechart('hotel')"
+						/>
+						<label class="form-check-label" for="hotel">
+							Hoteis
+						</label>
+					</div>
+					<div class="form-check">
+						<input
+							class="form-check-input"
+							type="checkbox"
+							value=""
+							id="hotel-apartamentos"
+							onclick="update_linechart('hotel-apartamentos')"
+						/>
+						<label
+							class="form-check-label"
+							for="hotel-apartamentos"
+						>
+							Hoteis-Apartamentos
+						</label>
+					</div>
+					<div class="form-check">
+						<input
+							class="form-check-input"
+							type="checkbox"
+							value=""
+							id="-QWEFRWEFWEFWE"
+							onclick="update_linechart('hWEFWentos')"
+						/>
+						<label class="form-check-label" for="EFWEFWEFWEFs">
+							add more
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div id="barplot_div"></div>
 		</div>
 	</body>
 	<script>
+		/////////////////
+		//  Line chart
+		////////////////
+
+		// set the dimensions and margins of the graph
+		var line_chart_margin = { top: 10, right: 30, bottom: 30, left: 70 },
+			line_chart_width =
+				800 - line_chart_margin.left - line_chart_margin.right,
+			line_chart_height =
+				400 - line_chart_margin.top - line_chart_margin.bottom;
+
+		// append the svg object to the body of the page
+		var line_chart_svg = d3
+			.select("#linechart_div")
+			.append("svg")
+			.attr(
+				"width",
+				line_chart_width +
+					line_chart_margin.left +
+					line_chart_margin.right
+			)
+			.attr(
+				"height",
+				line_chart_height +
+					line_chart_margin.top +
+					line_chart_margin.bottom
+			)
+			.append("g")
+			.attr(
+				"transform",
+				"translate(" +
+					line_chart_margin.left +
+					"," +
+					line_chart_margin.top +
+					")"
+			);
+
+		//Read the data
+		d3.csv(
+			"files/receitas_alojamento_portugal_line.csv",
+			// Now I can use this dataset:
+			function (data) {
+				var x = d3
+					.scalePoint()
+					.domain(
+						data.map(function (d) {
+							return d.date;
+						})
+					)
+					.range([0, line_chart_width]);
+
+				line_chart_svg
+					.append("g")
+					.attr("transform", "translate(0," + line_chart_height + ")")
+					.call(d3.axisBottom(x))
+					.attr("class", "myXaxis_line");
+
+				// Add Y axis
+				var y = d3
+					.scaleLinear()
+					.domain([
+						0,
+						d3.max(data, function (d) {
+							return +d.total;
+						}),
+					])
+					.range([line_chart_height, 0]);
+				line_chart_svg.append("g").call(d3.axisLeft(y));
+
+				lines = {
+					total: "black",
+					hotel: "blue",
+					"hotel-apartamentos": "green",
+				};
+
+				for (const key in lines) {
+					// Add the line
+					line_chart_svg
+						.append("path")
+						.datum(data)
+						.attr("id", key + "_")
+						.attr("fill", "none")
+						.attr("stroke", "steelblue")
+						.attr("stroke-width", 2)
+						.attr("opacity", 0)
+						.attr("stroke", lines[key])
+						.attr(
+							"d",
+							d3
+								.line()
+								.x(function (d) {
+									return x(d.date);
+								})
+								.y(function (d) {
+									return y(d[key]);
+								})
+						);
+				}
+				// Draw total line at start
+				var total = d3.select("#total_");
+				total.attr("opacity", 1);
+
+				// This allows to find the closest X index of the mouse:
+				var bisect = d3.bisector(function (d) {
+					return d.total;
+				}).left;
+
+				// Create the circle that travels along the curve of chart
+				var focus = line_chart_svg
+					.append("g")
+					.append("circle")
+					.style("fill", "none")
+					.attr("stroke", "black")
+					.attr("r", 8.5)
+					.style("opacity", 0);
+
+				// Create the text that travels along the curve of chart
+				var focusText = line_chart_svg
+					.append("g")
+					.append("text")
+					.style("opacity", 0)
+					.attr("text-anchor", "left")
+					.attr("alignment-baseline", "middle");
+
+				line_chart_svg
+					.append("rect")
+					.style("fill", "none")
+					.style("pointer-events", "all")
+					.attr("width", line_chart_width)
+					.attr("height", line_chart_height)
+					.on("mouseover", mouseover)
+					.on("mousemove", mousemove)
+					.on("mouseout", mouseout);
+
+				// What happens when the mouse move -> show the annotations at the right positions.
+				function mouseover() {
+					focus.style("opacity", 1);
+					focusText.style("opacity", 1);
+				}
+
+				function mousemove() {
+					var xx = d3.scaleTime().range([0, line_chart_width]);
+					console.log(d3.mouse(this))
+					console.log(xx)
+					// recover coordinate we need
+					var x0 = xx.invert(d3.mouse(this)[0]);
+					console.log(x0, "Wefwefe")
+					/* var i = bisect(data, x0, 1);
+					selectedData = data[i];
+					focus
+						.attr("cx", x(selectedData.x))
+						.attr("cy", y(selectedData.y));
+					focusText
+						.html("OLAAA")
+						.attr("x", x(selectedData.x) + 15)
+						.attr("y", y(selectedData.y)); */
+				}
+				function mouseout() {
+					focus.style("opacity", 0);
+					focusText.style("opacity", 0);
+				}
+			}
+		);
+
+		function update_linechart(checkboxid) {
+			var checkbox_elem = document.getElementById(checkboxid).checked;
+			var svgline = d3.select("#" + checkboxid + "_");
+
+			if (checkbox_elem) {
+				svgline.attr("opacity", 1);
+			} else {
+				svgline.attr("opacity", 0);
+			}
+		}
+
+		/////////////////
+		//  BAR PLOT
+		////////////////
+
 		// set the dimensions and margins of the graph
 		var margin = { top: 30, right: 30, bottom: 70, left: 70 },
-			width = 1000 - margin.left - margin.right,
-			height = 500 - margin.top - margin.bottom;
+			width = 500 - margin.left - margin.right,
+			height = 400 - margin.top - margin.bottom;
 
 		// append the svg object to the body of the page
 		var svg = d3
-			.select("#my_dataviz")
+			.select("#barplot_div")
 			.append("svg")
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom)
@@ -160,7 +397,6 @@
 
 		// A function that create / update_bar the plot for a given variable:
 		function update_bar(selectedVar, filename, sortOrder) {
-			console.log("update_bar: ", selectedVar, filename, sortOrder);
 			// Parse the Data
 			d3.csv(filename, function (data) {
 				if (sortOrder != undefined) {
@@ -178,8 +414,6 @@
 						}
 					});
 				}
-
-				console.log(data);
 
 				// X axis
 				x.domain(

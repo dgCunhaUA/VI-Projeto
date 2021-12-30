@@ -50,10 +50,10 @@ svg {
 text {
 	font-size: 12px;
 }
-
+/* 
 path {
 	stroke: gray;
-}
+} */
 
 line {
 	stroke: gray;
@@ -100,4 +100,13 @@ text.source {
 .myXaxis g text{
     transform: rotate(-45deg);
     text-anchor: end;
+}
+
+.myXaxis_line g text{
+    transform: rotate(-45deg);
+    text-anchor: end;
+}
+
+.checkboxes {
+	align-self: center;
 }
