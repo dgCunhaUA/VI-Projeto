@@ -110,3 +110,7 @@ text.source {
 .checkboxes {
 	align-self: center;
 }
+
+.cities_text {
+	font-size: 9px;
+}
