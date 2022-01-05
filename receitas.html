@@ -19,55 +19,24 @@
 		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 		<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 
+		<link rel="stylesheet" href="navbar.css" />
 		<link rel="stylesheet" href="receitas.css" />
 	</head>
 
 	<body>
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<div class="container-fluid">
-				<a class="navbar-brand" href="index.html">Navbar</a>
-				<button
-					class="navbar-toggler"
-					type="button"
-					data-bs-toggle="collapse"
-					data-bs-target="#navbarSupportedContent"
-					aria-controls="navbarSupportedContent"
-					aria-expanded="false"
-					aria-label="Toggle navigation"
-				>
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div
-					class="collapse navbar-collapse"
-					id="navbarSupportedContent"
-				>
-					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								aria-current="page"
-								href="/index.html"
-								>Home</a
-							>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="/alojamento.html"
-								>Alojamento</a
-							>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link active" href="/receitas.html"
-								>Receitas</a
-							>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="/despesas.html"
-								>Despesas</a
-							>
-						</li>
-					</ul>
-				</div>
-			</div>
+		<nav class="navMenu">
+			<a href="/index.html">Home</a>
+			<a href="/alojamento.html">Alojamentos Turísticos</a>
+			<a href="/ocupacao.html"
+				>Ocupação de Alojamentos Turísticos</a
+			>
+			<a href="/turismo.html"
+				>Turismo da População Residente</a
+			>
+			<a href="/receitas.html" class="active"
+				>Receitas de Alojamentos Turísticos</a
+			>
+			<div id="dot"></div>
 		</nav>
 
 		<div class="container">
@@ -197,7 +166,7 @@
 	</body>
 	<script>
 		/////////////////
-		//  Line chart
+		//  Map
 		////////////////
 
 		var map_svg = d3.select("#map"),
@@ -242,7 +211,8 @@
 					.style("stroke", "black")
 					.style("stroke-width", "2px");
 
-				map_svg.selectAll(".cities_text").remove();
+				//map_svg.selectAll(".cities_text").remove();
+				map_svg.selectAll(".cities_text").style("display", "none");
 			};
 
 			let mouseLeave = function (d) {
@@ -252,31 +222,7 @@
 					.style("stroke", "white")
 					.style("stroke-width", "1px");
 
-				map_svg
-					.selectAll("text")
-					.data(data.features)
-					.enter()
-					.append("svg:text")
-					.text(function (d) {
-						return d.properties.name;
-					})
-					.attr("x", function (d) {
-						return projection([
-							d.properties.longitude,
-							d.properties.latitude,
-						])[0];
-					})
-					.attr("y", function (d) {
-						return projection([
-							d.properties.longitude,
-							d.properties.latitude,
-						])[1];
-					})
-					.attr("text-anchor", "middle")
-					.attr("class", "cities_text")
-					.on("mouseover", function (d) {
-						d3.select(this).remove();
-					});
+				map_svg.selectAll(".cities_text").style("display", "");
 			};
 
 			// Draw the map
@@ -290,12 +236,6 @@
 				.attr("d", d3.geoPath().projection(projection))
 				// set the color of each district
 				.attr("fill", function (d) {
-					/* console.log(d.properties.region);
-					if (d.properties.region in color_scheme) {
-						return color_scheme[d.properties.region];
-					} else {
-						return "#0000ff";
-					} */
 					if (
 						d.properties.info["2020"][0] > 0 &&
 						d.properties.info["2020"][0] < 500
@@ -362,13 +302,9 @@
 					])[1];
 				})
 				.attr("text-anchor", "middle")
-				.attr("class", "cities_text")
-				.on("mouseover", function (d) {
-					d3.select(this).remove();
-				});
+				.attr("class", "cities_text");
 
 			// Color scheme legend
-
 			// create a list of keys
 			var keys = [
 				"0 - 499",
