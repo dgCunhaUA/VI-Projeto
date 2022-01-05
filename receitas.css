@@ -114,3 +114,7 @@ text.source {
 .cities_text {
 	font-size: 9px;
 }
+
+.linechart_div {
+	margin-top: 30px;
+}
