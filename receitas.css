@@ -114,3 +114,10 @@ text.source {
 .cities_text {
 	font-size: 9px;
 }
+
+.piecontainer{
+	margin: auto;
+  	width: 50%;
+	  padding: 10px;
+
+ }

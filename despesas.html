@@ -9,6 +9,8 @@
 			integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
 			crossorigin="anonymous"
 		/>
+		<link rel="stylesheet" href="receitas.css" />
+
 	</head>
 
 	<body>
@@ -50,11 +52,102 @@
 						</li>
 					</ul>
 				</div>
+				
 			</div>
 		</nav>
+		<div class = "container">
+			<div class="title">
+				<h1>
+					Dormidas nos alojamentos turísticos: total e por país de residência do hóspede
+				</h1>
+			</div>
+			<div class="subtitle">
+				<h4>
+					Quantas noites passam os turistas em estabelecimentos hoteleiros como hotéis e pensões, por país de origem?
+				</h4>
+			</div>
+		</div>
+		<div class = "piecontainer">
+			<div class="div_d3"></div>
 
-		<div class="div_d3"></div>
-
+			<!-- Add 2 buttons -->
+			<button onclick="update(data1)">2018</button>
+			<button onclick="update(data2)">2019</button>
+					
+			<!-- Create a div where the graph will take place -->
+			<div id="my_dataviz"></div>
+		</div>
 		<script type="text/javascript"></script>
+
+		<script>
+
+			// set the dimensions and margins of the graph
+			const width = 450,
+				height = 450,
+				margin = 40;
+			
+			// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+			const radius = Math.min(width, height) / 2 - margin;
+			
+			// append the svg object to the div called 'my_dataviz'
+			const svg = d3.select("#my_dataviz")
+			  .append("svg")
+				.attr("width", width)
+				.attr("height", height)
+			  .append("g")
+				.attr("transform", `translate(${width/2}, ${height/2})`);
+			
+			// create 2 data_set
+			const data1 = {Portugal: 19889676, Europa: 38806350, África:546234, América:6215186, Ásia:1824725}
+			const data2 = {Portugal: 21107132, Europa: 38653391, África:601114, América:7209959, Ásia:2152433}
+			
+			// set the color scale
+			const color = d3.scaleOrdinal()
+			  .domain(["a", "b", "c", "d", "e", "f"])
+			  .range(d3.schemeDark2);
+			
+			// A function that create / update the plot for a given variable:
+			function update(data) {
+			
+			  	// Compute the position of each group on the pie:
+				const pie = d3.pie()
+					.value(function(d) {return d[1]; })
+					.sort(function(a, b) { return d3.ascending(a.key, b.key);} ) // This make sure that group order remains the same in the pie chart
+				const data_ready = pie(Object.entries(data))
+				
+				// map to data
+				const u = svg.selectAll("path")
+					.data(data_ready)
+
+				const arcGenerator = d3.arc()
+				.innerRadius(0)
+				.outerRadius(radius)
+			
+				// Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+				u
+					.data(data_ready)
+					.join('path')
+					.transition()
+					.duration(1000)
+					.attr('d', arcGenerator)
+					.attr('fill', function(d){ return(color(d.data[0])) })
+					.attr("stroke", "white")
+					.style("stroke-width", "2px")
+					.style("opacity", 1)
+				
+				
+				u	
+					.data(data_ready)
+					.join('text')
+					.text(function(d){ return d.data[0]})
+					.attr("transform", function(d) { return `translate(${arcGenerator.centroid(d)})`})
+					.style("text-anchor", "middle")
+					.style("font-size", 13)
+					
+			}
+			
+			// Initialize the plot with the first dataset
+			update(data1)
+			</script>
 	</body>
 </html>
