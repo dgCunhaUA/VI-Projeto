@@ -14,13 +14,12 @@
 			crossorigin="anonymous"
 		/>
 		<!-- Load d3.js -->
-		<!-- <script src="https://d3js.org/d3.v4.js"></script> -->
 		<script type="text/javascript" src="http://d3js.org/d3.v6.js"></script>
 		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 		<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 
 		<link rel="stylesheet" href="navbar.css" />
-		<link rel="stylesheet" href="ocupacao.css" />
+		<link rel="stylesheet" href="turismo.css" />
 	</head>
 
 	<body>
@@ -39,28 +38,57 @@
 			<div id="dot"></div>
 		</nav>
 
-		<div class = "container">
-			<div class="title">
-				<h1>
-					Dormidas nos alojamentos turísticos: total e por país de residência do hóspede
-				</h1>
-			</div>
-			<div class="subtitle">
-				<h4>
-					Quantas noites passam os turistas em estabelecimentos hoteleiros como hotéis e pensões, por país de origem?
-				</h4>
+		<div class="container">
+			<div class="row">
+				<div class="col-6">
+					<div class="title">
+						<h1>Dormidas nos alojamentos turísticos: total e por país de residência do hóspede</h1>
+					</div>
+					<div class="subtitle">
+						<h4>
+							Onde há mais e menos pessoas a fazerem viagens
+							turísticas, por faixas etárias
+						</h4>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="title">
+						<h1>
+							Proporção de hóspedes estrangeiros nos alojamentos turísticos.
+						</h1>
+					</div>
+					<div class="subtitle">
+						<h4>
+							Quantas noites passam os turistas em estabelecimentos hoteleiros como hotéis e pensões, por país de origem?</h4>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class = "piecontainer">
-			<div class="div_d3"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-6">
+					<div class="graph container">
+						<!-- Add 2 buttons -->
+						<button class="btn btn-primary" onclick="update(data1)">2018</button>
+						<button class="btn btn-primary" onclick="update(data2)">2019</button>
+						<!-- Create a div where the graph will take place -->
+						<div id="my_dataviz"></div>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="graph container">
+						<!-- Add 2 buttons -->
+						<button class="btn btn-primary" onclick="update_lollipop('2019')">2019</button>
+						<button class="btn btn-primary" onclick="update_lollipop('2020')">2020</button>
+						
+						<!-- Create a div where the graph will take place -->
+						<div id="my_dataviz"></div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-			<!-- Add 2 buttons -->
-			<button onclick="update(data1)">2018</button>
-			<button onclick="update(data2)">2019</button>
-					
-			<!-- Create a div where the graph will take place -->
-			<div id="my_dataviz"></div>
-		</div>
+	
 	</body>
 
 	<script>
@@ -131,5 +159,87 @@
 			
 			// Initialize the plot with the first dataset
 			update(data1)
+
+
+		//Lollipop Chart 	
+
+		// set the dimensions and margins of the graph
+		const margin_lollipop = {top: 30, right: 30, bottom: 70, left: 60},
+			width_lollipop = 460 - margin_lollipop.left - margin_lollipop.right,
+			height_lollipop = 400 - margin_lollipop.top - margin_lollipop.bottom;
+
+		// append the svg object to the body of the page
+		const svg_lollipop = d3.select("#my_dataviz")
+		.append("svg")
+			.attr("width", width_lollipop + margin_lollipop.left + margin_lollipop.right)
+			.attr("height", height_lollipop + margin_lollipop.top + margin_lollipop.bottom)
+		.append("g")
+			.attr("transform", `translate(${margin_lollipop.left}, ${margin_lollipop.top})`);
+
+		// Initialize the X axis
+		const x = d3.scaleBand()
+		.range([ 0, width_lollipop ])
+		.padding(1);
+		const xAxis = svg_lollipop.append("g")
+		.attr("transform", `translate(0, ${height_lollipop})`)
+
+		// Initialize the Y axis
+		const y = d3.scaleLinear()
+		.range([ height_lollipop, 0]);
+		const yAxis = svg_lollipop.append("g")
+		.attr("class", "myYaxis")
+
+
+		// A function that create / update the plot for a given variable:
+		function update_lollipop(selectedVar) {
+
+		// Parse the Data
+		d3.csv("files/ocupaçaoporestrangeiros.csv").then( function(data) {
+
+			// X axis
+			x.domain(data.map(function(d) { return d.country; }))
+			xAxis.transition().duration(1000).call(d3.axisBottom(x))
+
+			// Add Y axis
+			y.domain([0, d3.max(data, function(d) { return +d[selectedVar] }) ]);
+			yAxis.transition().duration(1000).call(d3.axisLeft(y));
+
+			// variable u: map data to existing circle
+			const j = svg_lollipop.selectAll(".myLine")
+			.data(data)
+			// update lines
+			j
+			.join("line")
+			.attr("class", "myLine")
+			.transition()
+			.duration(1000)
+				.attr("x1", function(d) { return x(d.country); })
+				.attr("x2", function(d) { return x(d.country); })
+				.attr("y1", y(0))
+				.attr("y2", function(d) { return y(d[selectedVar]); })
+				.attr("stroke", "grey")
+
+
+			// variable u: map data to existing circle
+			const u = svg_lollipop.selectAll("circle")
+			.data(data)
+			// update bars
+			u
+			.join("circle")
+			.transition()
+			.duration(1000)
+				.attr("cx", function(d) { return x(d.country); })
+				.attr("cy", function(d) { return y(d[selectedVar]); })
+				.attr("r", 8)
+				.attr("fill", "#69b3a2");
+
+
+		})
+
+		}
+
+		// Initialize plot
+		update_lollipop('2020')
+
 	</script>
 </html>
