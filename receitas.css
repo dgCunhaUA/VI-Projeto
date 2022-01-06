@@ -118,3 +118,9 @@ text.source {
 .linechart_div {
 	margin-top: 30px;
 }
+.piecontainer{
+	margin: auto;
+  	width: 50%;
+	  padding: 10px;
+
+ }

@@ -106,17 +106,19 @@
 			</div>
 		</div>
 
-		<div class="row">
-			<div class="col-6">
-				<div class="graph container">
-					<!-- Create a div where the graph will take place -->
-					<div id="histogram_div"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-6">
+					<div class="graph container">
+						<!-- Create a div where the graph will take place -->
+						<div id="histogram_div"></div>
+					</div>
 				</div>
-			</div>
-			<div class="col-6">
-				<div class="graph container">
-					<!-- Create a div where the graph will take place -->
-					<div id="my_dataviz"></div>
+				<div class="col-6">
+					<div class="graph container">
+						<!-- Create a div where the graph will take place -->
+						<div id="my_dataviz"></div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -260,7 +262,9 @@
 			var mouseover = function (d) {
 				var subgroupName = d3.select(this.parentNode).datum().key;
 				var subgroupValue = d.data[subgroupName];
-				var total = parseInt(d.data["Feminino"]) + parseInt(d.data["Masculino"])
+				var total =
+					parseInt(d.data["Feminino"]) +
+					parseInt(d.data["Masculino"]);
 				tooltip
 					.html(
 						"Genero: " +
