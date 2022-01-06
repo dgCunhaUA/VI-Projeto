@@ -260,13 +260,17 @@
 			var mouseover = function (d) {
 				var subgroupName = d3.select(this.parentNode).datum().key;
 				var subgroupValue = d.data[subgroupName];
+				var total = parseInt(d.data["Feminino"]) + parseInt(d.data["Masculino"])
 				tooltip
 					.html(
 						"Genero: " +
 							subgroupName +
 							"<br>" +
 							"Valor: " +
-							subgroupValue
+							subgroupValue +
+							"<br>" +
+							"Total: " +
+							total
 					)
 					.style("opacity", 1);
 			};
