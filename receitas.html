@@ -19,55 +19,20 @@
 		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 		<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 
+		<link rel="stylesheet" href="navbar.css" />
 		<link rel="stylesheet" href="receitas.css" />
 	</head>
 
 	<body>
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<div class="container-fluid">
-				<a class="navbar-brand" href="index.html">Navbar</a>
-				<button
-					class="navbar-toggler"
-					type="button"
-					data-bs-toggle="collapse"
-					data-bs-target="#navbarSupportedContent"
-					aria-controls="navbarSupportedContent"
-					aria-expanded="false"
-					aria-label="Toggle navigation"
-				>
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div
-					class="collapse navbar-collapse"
-					id="navbarSupportedContent"
-				>
-					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								aria-current="page"
-								href="/index.html"
-								>Home</a
-							>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="/alojamento.html"
-								>Alojamento</a
-							>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link active" href="/receitas.html"
-								>Receitas</a
-							>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="/despesas.html"
-								>Despesas</a
-							>
-						</li>
-					</ul>
-				</div>
-			</div>
+		<nav class="navMenu">
+			<a href="/index.html">Home</a>
+			<a href="/alojamento.html">Alojamentos Turísticos</a>
+			<a href="/ocupacao.html">Ocupação de Alojamentos Turísticos</a>
+			<a href="/turismo.html">Turismo da População Residente</a>
+			<a href="/receitas.html" class="active"
+				>Receitas de Alojamentos Turísticos</a
+			>
+			<div id="dot"></div>
 		</nav>
 
 		<div class="container">
@@ -197,9 +162,9 @@
 	</body>
 	<script>
 		/////////////////
-		//  Line chart
+		//  Map
 		////////////////
-
+		selected_year = "2020";
 		var map_svg = d3.select("#map"),
 			map_width = +map_svg.attr("width"),
 			map_height = +map_svg.attr("height");
@@ -212,14 +177,14 @@
 
 		d3.json("files/prt.json", function (data) {
 			/* color_scheme = {
-				Norte: "#00ff00",
-				Centro: "#ff0000",
-				Alentejo: "#0f0f0f",
-				Lisbon: "orange",
-				Algarve: "brown",
-				"Região Autônoma dos Madeira": "rgb(85, 106, 98)",
-				"Região Autônoma dos Açores": "yellow"
-			}; */
+					Norte: "#00ff00",
+					Centro: "#ff0000",
+					Alentejo: "#0f0f0f",
+					Lisbon: "orange",
+					Algarve: "brown",
+					"Região Autônoma dos Madeira": "rgb(85, 106, 98)",
+					"Região Autônoma dos Açores": "yellow"
+				}; */
 			color_scheme = { 1: "#fee8c8", 2: "#fdae6b", 3: "#e6550d" };
 
 			// create a tooltip
@@ -232,7 +197,8 @@
 				.style("border", "solid")
 				.style("border-width", "2px")
 				.style("border-radius", "5px")
-				.style("padding", "5px");
+				.style("padding", "5px")
+				.attr("id", "map_tooltip");
 
 			let mouseOver = function (d) {
 				Tooltip.style("opacity", 1);
@@ -242,7 +208,8 @@
 					.style("stroke", "black")
 					.style("stroke-width", "2px");
 
-				map_svg.selectAll(".cities_text").remove();
+				//map_svg.selectAll(".cities_text").remove();
+				map_svg.selectAll(".cities_text").style("display", "none");
 			};
 
 			let mouseLeave = function (d) {
@@ -252,31 +219,7 @@
 					.style("stroke", "white")
 					.style("stroke-width", "1px");
 
-				map_svg
-					.selectAll("text")
-					.data(data.features)
-					.enter()
-					.append("svg:text")
-					.text(function (d) {
-						return d.properties.name;
-					})
-					.attr("x", function (d) {
-						return projection([
-							d.properties.longitude,
-							d.properties.latitude,
-						])[0];
-					})
-					.attr("y", function (d) {
-						return projection([
-							d.properties.longitude,
-							d.properties.latitude,
-						])[1];
-					})
-					.attr("text-anchor", "middle")
-					.attr("class", "cities_text")
-					.on("mouseover", function (d) {
-						d3.select(this).remove();
-					});
+				map_svg.selectAll(".cities_text").style("display", "");
 			};
 
 			// Draw the map
@@ -290,20 +233,14 @@
 				.attr("d", d3.geoPath().projection(projection))
 				// set the color of each district
 				.attr("fill", function (d) {
-					/* console.log(d.properties.region);
-					if (d.properties.region in color_scheme) {
-						return color_scheme[d.properties.region];
-					} else {
-						return "#0000ff";
-					} */
 					if (
-						d.properties.info["2020"][0] > 0 &&
-						d.properties.info["2020"][0] < 500
+						d.properties.info[selected_year][0] > 0 &&
+						d.properties.info[selected_year][0] < 500
 					) {
 						return color_scheme[1];
 					} else if (
-						d.properties.info["2020"][0] >= 500 &&
-						d.properties.info["2020"][0] < 1000
+						d.properties.info[selected_year][0] >= 500 &&
+						d.properties.info[selected_year][0] < 1000
 					) {
 						return color_scheme[2];
 					} else {
@@ -326,11 +263,11 @@
 							d.properties.region +
 							"<br>" +
 							"Total: " +
-							d.properties.info["2020"][0] +
+							d.properties.info[selected_year][0] +
 							"€" +
 							"<br>" +
 							"Hoteis: " +
-							d.properties.info["2020"][1] +
+							d.properties.info[selected_year][1] +
 							"€"
 					)
 						.style("left", `${pos["x"]}px`)
@@ -362,26 +299,26 @@
 					])[1];
 				})
 				.attr("text-anchor", "middle")
-				.attr("class", "cities_text")
-				.on("mouseover", function (d) {
-					d3.select(this).remove();
-				});
+				.attr("class", "cities_text");
 
 			// Color scheme legend
-
 			// create a list of keys
-			var keys = [
-				"0 - 499",
-				"500 - 999",
-				"1000 - 1000+"
-			];
+			var keys = ["0 - 499", "500 - 999", "1000 - 1000+"];
 
 			// Usually you have a color scale in your chart already
-			var color = d3.scaleOrdinal().domain(keys).range($.map(color_scheme, function(value, key) { return value }));
+			var color = d3
+				.scaleOrdinal()
+				.domain(keys)
+				.range(
+					$.map(color_scheme, function (value, key) {
+						return value;
+					})
+				);
 
 			// Add one dot in the legend for each name.
 			var size = 20;
-			map_svg.selectAll("mydots")
+			map_svg
+				.selectAll("mydots")
 				.data(keys)
 				.enter()
 				.append("rect")
@@ -396,7 +333,8 @@
 				});
 
 			// Add one dot in the legend for each name.
-			map_svg.selectAll("mylabels")
+			map_svg
+				.selectAll("mylabels")
 				.data(keys)
 				.enter()
 				.append("text")
@@ -413,175 +351,274 @@
 				.attr("text-anchor", "left")
 				.style("alignment-baseline", "middle");
 		});
+		/////////////////////////////////
+
+		function updateMap(selected_year) {
+			d3.json("files/prt.json", function (data) {
+
+				Tooltip = d3.select("#map_tooltip")
+
+				let mouseOver = function (d) {
+					Tooltip.style("opacity", 1);
+					d3.selectAll(".district").style("opacity", 0.5);
+					d3.select(this)
+						.style("opacity", 1)
+						.style("stroke", "black")
+						.style("stroke-width", "2px");
+
+					//map_svg.selectAll(".cities_text").remove();
+					map_svg.selectAll(".cities_text").style("display", "none");
+				};
+
+				let mouseLeave = function (d) {
+					Tooltip.style("opacity", 0);
+					d3.selectAll(".district").style("opacity", 0.8);
+					d3.select(this)
+						.style("stroke", "white")
+						.style("stroke-width", "1px");
+
+					map_svg.selectAll(".cities_text").style("display", "");
+				};
+
+				var u = map_svg.select("g").selectAll("path");
+
+				u.enter()
+					.append("g")
+					.merge(u)
+					.data(data.features)
+					.attr("fill", function (d) {
+						console.log(
+							d.properties.info[selected_year][0],
+							"what"
+						);
+						if (
+							d.properties.info[selected_year][0] > 0 &&
+							d.properties.info[selected_year][0] < 500
+						) {
+							return color_scheme[1];
+						} else if (
+							d.properties.info[selected_year][0] >= 500 &&
+							d.properties.info[selected_year][0] < 1000
+						) {
+							return color_scheme[2];
+						} else {
+							return color_scheme[3];
+						}
+					})
+					.style("stroke", "white")
+					.style("stroke-width", "1px")
+					.attr("class", function (d) {
+						return "district";
+					})
+					.style("opacity", 0.8)
+					.on("mouseover", mouseOver)
+					.on("mouseleave", mouseLeave)
+					.on("mousemove", function (d) {
+						let pos = d3
+							.select(this)
+							.node()
+							.getBoundingClientRect();
+						Tooltip.html(
+							d.properties.name +
+								"<br>" +
+								d.properties.region +
+								"<br>" +
+								"Total: " +
+								d.properties.info[selected_year][0] +
+								"€" +
+								"<br>" +
+								"Hoteis: " +
+								d.properties.info[selected_year][1] +
+								"€"
+						)
+							.style("left", `${pos["x"]}px`)
+							.style(
+								"top",
+								`${window.pageYOffset + pos["y"] - 100}px`
+							);
+					});
+			});
+		}
 
 		/////////////////
 		//  Line chart
 		////////////////
+		function createLineChart() {
+			// set the dimensions and margins of the graph
+			var line_chart_margin = {
+					top: 10,
+					right: 30,
+					bottom: 30,
+					left: 70,
+				},
+				line_chart_width =
+					800 - line_chart_margin.left - line_chart_margin.right,
+				line_chart_height =
+					400 - line_chart_margin.top - line_chart_margin.bottom;
 
-		// set the dimensions and margins of the graph
-		var line_chart_margin = { top: 10, right: 30, bottom: 30, left: 70 },
-			line_chart_width =
-				800 - line_chart_margin.left - line_chart_margin.right,
-			line_chart_height =
-				400 - line_chart_margin.top - line_chart_margin.bottom;
+			// append the svg object to the body of the page
+			var line_chart_svg = d3
+				.select("#linechart_div")
+				.append("svg")
+				.attr(
+					"width",
+					line_chart_width +
+						line_chart_margin.left +
+						line_chart_margin.right
+				)
+				.attr(
+					"height",
+					line_chart_height +
+						line_chart_margin.top +
+						line_chart_margin.bottom
+				)
+				.append("g")
+				.attr(
+					"transform",
+					"translate(" +
+						line_chart_margin.left +
+						"," +
+						line_chart_margin.top +
+						")"
+				);
 
-		// append the svg object to the body of the page
-		var line_chart_svg = d3
-			.select("#linechart_div")
-			.append("svg")
-			.attr(
-				"width",
-				line_chart_width +
-					line_chart_margin.left +
-					line_chart_margin.right
-			)
-			.attr(
-				"height",
-				line_chart_height +
-					line_chart_margin.top +
-					line_chart_margin.bottom
-			)
-			.append("g")
-			.attr(
-				"transform",
-				"translate(" +
-					line_chart_margin.left +
-					"," +
-					line_chart_margin.top +
-					")"
-			);
+			//Read the data
+			d3.csv(
+				"files/receitas_alojamento_portugal_line.csv",
+				// Now I can use this dataset:
+				function (data) {
+					var x = d3
+						.scalePoint()
+						.domain(
+							data.map(function (d) {
+								return d.date;
+							})
+						)
+						.range([0, line_chart_width]);
 
-		//Read the data
-		d3.csv(
-			"files/receitas_alojamento_portugal_line.csv",
-			// Now I can use this dataset:
-			function (data) {
-				var x = d3
-					.scalePoint()
-					.domain(
-						data.map(function (d) {
-							return d.date;
-						})
-					)
-					.range([0, line_chart_width]);
-
-				line_chart_svg
-					.append("g")
-					.attr("transform", "translate(0," + line_chart_height + ")")
-					.call(d3.axisBottom(x))
-					.attr("class", "myXaxis_line");
-
-				// Add Y axis
-				var y = d3
-					.scaleLinear()
-					.domain([
-						0,
-						d3.max(data, function (d) {
-							return +d.total;
-						}),
-					])
-					.range([line_chart_height, 0]);
-				line_chart_svg.append("g").call(d3.axisLeft(y));
-
-				lines = {
-					total: "black",
-					hotel: "blue",
-					"hotel-apartamentos": "green",
-				};
-
-				for (const key in lines) {
-					// Add the line
-					line_chart_svg
-						.append("path")
-						.datum(data)
-						.attr("id", key + "_")
-						.attr("fill", "none")
-						.attr("stroke", "steelblue")
-						.attr("stroke-width", 2)
-						.attr("opacity", 0)
-						.attr("stroke", lines[key])
-						.attr(
-							"d",
-							d3
-								.line()
-								.x(function (d) {
-									return x(d.date);
-								})
-								.y(function (d) {
-									return y(d[key]);
-								})
-						);
-				}
-				// Draw total line at start
-				var total = d3.select("#total_");
-				total.attr("opacity", 1);
-
-				// create a tooltip
-				var Tooltip = d3
-					.select("#linechart_div")
-					.append("div")
-					.style("opacity", 0)
-					.attr("class", "tooltip")
-					.style("background-color", "white")
-					.style("border", "solid")
-					.style("border-width", "2px")
-					.style("border-radius", "5px")
-					.style("padding", "5px");
-
-				// Three function that change the tooltip when user hover / move / leave a cell
-				var mouseover = function (d) {
-					Tooltip.style("opacity", 1);
-				};
-				var mouseleave = function (d) {
-					Tooltip.style("opacity", 0);
-				};
-
-				for (const key in lines) {
-					// Add the points
 					line_chart_svg
 						.append("g")
-						.selectAll("dot")
-						.data(data)
-						.enter()
-						.append("circle")
-						.attr("id", key + "_dot")
-						.attr("class", "myCircle")
-						.attr("cx", function (d) {
-							return x(d.date);
-						})
-						.attr("cy", function (d) {
-							return y(d[key]);
-						})
-						.attr("r", 8)
-						.attr("stroke", "#69b3a2")
-						.attr("stroke-width", 3)
-						.attr("fill", "white")
-						.attr("opacity", 0)
-						.on("mouseover", mouseover)
-						.on("mousemove", function (d) {
-							if (document.getElementById(key).checked) {
-								let pos = d3
-									.select(this)
-									.node()
-									.getBoundingClientRect();
-								Tooltip.html("Exact value: " + d[key])
-									.style("left", `${pos["x"]}px`)
-									.style(
-										"top",
-										`${
-											window.pageYOffset + pos["y"] - 60
-										}px`
-									);
-							}
-						})
-						.on("mouseleave", mouseleave);
-				}
+						.attr(
+							"transform",
+							"translate(0," + line_chart_height + ")"
+						)
+						.call(d3.axisBottom(x))
+						.attr("class", "myXaxis_line");
 
-				// Draw total dot at start
-				var total = d3.selectAll("#total_dot");
-				total.attr("opacity", 1);
-			}
-		);
+					// Add Y axis
+					var y = d3
+						.scaleLinear()
+						.domain([
+							0,
+							d3.max(data, function (d) {
+								return +d.total;
+							}),
+						])
+						.range([line_chart_height, 0]);
+					line_chart_svg.append("g").call(d3.axisLeft(y));
+
+					lines = {
+						total: "black",
+						hotel: "blue",
+						"hotel-apartamentos": "green",
+					};
+
+					for (const key in lines) {
+						// Add the line
+						line_chart_svg
+							.append("path")
+							.datum(data)
+							.attr("id", key + "_")
+							.attr("fill", "none")
+							.attr("stroke", "steelblue")
+							.attr("stroke-width", 2)
+							.attr("opacity", 0)
+							.attr("stroke", lines[key])
+							.attr(
+								"d",
+								d3
+									.line()
+									.x(function (d) {
+										return x(d.date);
+									})
+									.y(function (d) {
+										return y(d[key]);
+									})
+							);
+					}
+					// Draw total line at start
+					var total = d3.select("#total_");
+					total.attr("opacity", 1);
+
+					// create a tooltip
+					var Tooltip = d3
+						.select("#linechart_div")
+						.append("div")
+						.style("opacity", 0)
+						.attr("class", "tooltip")
+						.style("background-color", "white")
+						.style("border", "solid")
+						.style("border-width", "2px")
+						.style("border-radius", "5px")
+						.style("padding", "5px");
+
+					// Three function that change the tooltip when user hover / move / leave a cell
+					var mouseover = function (d) {
+						Tooltip.style("opacity", 1);
+					};
+					var mouseleave = function (d) {
+						Tooltip.style("opacity", 0);
+					};
+
+					for (const key in lines) {
+						// Add the points
+						line_chart_svg
+							.append("g")
+							.selectAll("dot")
+							.data(data)
+							.enter()
+							.append("circle")
+							.attr("id", key + "_dot")
+							.attr("class", "myCircle")
+							.attr("cx", function (d) {
+								return x(d.date);
+							})
+							.attr("cy", function (d) {
+								return y(d[key]);
+							})
+							.attr("r", 8)
+							.attr("stroke", "#69b3a2")
+							.attr("stroke-width", 3)
+							.attr("fill", "white")
+							.attr("opacity", 0)
+							.on("mouseover", mouseover)
+							.on("mousemove", function (d) {
+								if (document.getElementById(key).checked) {
+									let pos = d3
+										.select(this)
+										.node()
+										.getBoundingClientRect();
+									Tooltip.html("Exact value: " + d[key])
+										.style("left", `${pos["x"]}px`)
+										.style(
+											"top",
+											`${
+												window.pageYOffset +
+												pos["y"] -
+												60
+											}px`
+										);
+								}
+							})
+							.on("mouseleave", mouseleave);
+					}
+
+					// Draw total dot at start
+					var total = d3.selectAll("#total_dot");
+					total.attr("opacity", 1);
+				}
+			);
+		}
 
 		function update_linechart(checkboxid) {
 			var checkbox_elem = document.getElementById(checkboxid).checked;
@@ -600,12 +637,10 @@
 		/////////////////
 		//  BAR PLOT
 		////////////////
-
 		// set the dimensions and margins of the graph
 		var margin = { top: 30, right: 30, bottom: 70, left: 70 },
 			width = 500 - margin.left - margin.right,
 			height = 400 - margin.top - margin.bottom;
-
 		// append the svg object to the body of the page
 		var svg = d3
 			.select("#barplot_div")
@@ -617,22 +652,20 @@
 				"transform",
 				"translate(" + margin.left + "," + margin.top + ")"
 			);
-
 		// Initialize the X axis
 		var x = d3.scaleBand().range([0, width]).padding(0.2);
 		var xAxis = svg
 			.append("g")
 			.attr("transform", "translate(0," + height + ")")
 			.attr("class", "myXaxis");
-
 		// Initialize the Y axis
 		var y = d3.scaleLinear().range([height, 0]);
 		var yAxis = svg.append("g").attr("class", "myYaxis");
-
 		let sortOrder = true;
+		////////////////////////////
 
-		// A function that create / update_bar the plot for a given variable:
-		function update_bar(selectedVar, filename, sortOrder) {
+		// A function that create / updateBarPlot the plot for a given variable:
+		function updateBarPlot(selectedVar, filename, sortOrder) {
 			// Parse the Data
 			d3.csv(filename, function (data) {
 				if (sortOrder != undefined) {
@@ -671,7 +704,7 @@
 				// variable u: map data to existing bars
 				var u = svg.selectAll("rect").data(data);
 
-				// update_bar bars
+				// updateBarPlot bars
 				u.enter()
 					.append("rect")
 					.merge(u)
@@ -700,16 +733,24 @@
 			console.log("sort order: ", sortOrder);
 
 			sortOrder = !sortOrder;
-			update_bar(year, region, sortOrder);
+			updateBarPlot(year, region, sortOrder);
 		});
 
 		function onSelect() {
 			var year = document.getElementById("year-select").value;
 			var region = document.getElementById("region-select").value;
-			update_bar(year, region, undefined);
+			updateBarPlot(year, region, undefined);
+			//createMap(year);
+			updateMap(year);
 		}
 
 		// Initialize plot
-		update_bar("2020", "files/receitas_alojamento_portugal.csv", undefined);
+		updateBarPlot(
+			"2020",
+			"files/receitas_alojamento_portugal.csv",
+			undefined
+		);
+		//createMap("2020");
+		createLineChart();
 	</script>
 </html>

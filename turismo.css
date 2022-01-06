@@ -14,12 +14,15 @@
 }
 
 .graph {
+	width: 500px;
+	height: 100px;
 	margin-top: 50px;
 }
 
 .filters {
 	text-align: center;
-	margin-bottom: 30px;
+	margin-bottom: 10px;
+	margin-top: 40px;
 }
 
 
@@ -50,10 +53,10 @@ svg {
 text {
 	font-size: 12px;
 }
-/* 
+
 path {
 	stroke: gray;
-} */
+}
 
 line {
 	stroke: gray;
@@ -97,30 +100,8 @@ text.source {
 	font-size: 10px;
 }
 
+
 .myXaxis g text{
     transform: rotate(-45deg);
     text-anchor: end;
 }
-
-.myXaxis_line g text{
-    transform: rotate(-45deg);
-    text-anchor: end;
-}
-
-.checkboxes {
-	align-self: center;
-}
-
-.cities_text {
-	font-size: 9px;
-}
-
-.linechart_div {
-	margin-top: 30px;
-}
-.piecontainer{
-	margin: auto;
-  	width: 50%;
-	  padding: 10px;
-
- }

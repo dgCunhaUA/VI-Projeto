@@ -64,7 +64,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO19",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "MultiPolygon",
@@ -438,7 +438,7 @@
 				"gns_lang": null,
 				"gns_adm1": "PO23",
 				"gns_region": null,
-                "info": {"2020": [900, 900]}
+                "info": {"2020": [900, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "MultiPolygon",
@@ -797,7 +797,7 @@
 				"gns_lang": null,
 				"gns_adm1": "PO10",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "MultiPolygon",
@@ -983,7 +983,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO02",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -1260,7 +1260,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO13",
 				"gns_region": null,
-                "info": {"2020": [400, 900]}
+                "info": {"2020": [400, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "MultiPolygon",
@@ -1561,7 +1561,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO20",
 				"gns_region": null,
-                "info": {"2020": [500, 900]}
+                "info": {"2020": [500, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -1742,7 +1742,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO03",
 				"gns_region": null,
-                "info": {"2020": [500, 900]}
+                "info": {"2020": [500, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -2137,7 +2137,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO08",
 				"gns_region": null,
-                "info": {"2020": [400, 900]}
+                "info": {"2020": [400, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -2539,7 +2539,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO09",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "MultiPolygon",
@@ -2837,7 +2837,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO14",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "MultiPolygon",
@@ -3081,7 +3081,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO16",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -3389,7 +3389,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO18",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -3783,7 +3783,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO04",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -4033,7 +4033,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO05",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -4289,7 +4289,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO06",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -4622,7 +4622,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO07",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "MultiPolygon",
@@ -4960,7 +4960,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO11",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -5260,7 +5260,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO17",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [1000, 100]}
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -5469,7 +5469,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO22",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [1000, 100]}
 			},
 			"geometry": {
 				"type": "Polygon",
@@ -5732,7 +5732,7 @@
 				"gns_lang": "fra",
 				"gns_adm1": "PO21",
 				"gns_region": null,
-                "info": {"2020": [1000, 900]}
+                "info": {"2020": [1000, 900], "2019": [100, 100]}
 			},
 			"geometry": {
 				"type": "Polygon",
