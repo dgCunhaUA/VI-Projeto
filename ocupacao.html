@@ -82,7 +82,7 @@
 						<button class="btn btn-primary" onclick="update_lollipop('2020')">2020</button>
 						
 						<!-- Create a div where the graph will take place -->
-						<div id="my_dataviz"></div>
+						<div id="my_dataviz2"></div>
 					</div>
 				</div>
 			</div>
@@ -169,7 +169,7 @@
 			height_lollipop = 400 - margin_lollipop.top - margin_lollipop.bottom;
 
 		// append the svg object to the body of the page
-		const svg_lollipop = d3.select("#my_dataviz")
+		const svg_lollipop = d3.select("#my_dataviz2")
 		.append("svg")
 			.attr("width", width_lollipop + margin_lollipop.left + margin_lollipop.right)
 			.attr("height", height_lollipop + margin_lollipop.top + margin_lollipop.bottom)
