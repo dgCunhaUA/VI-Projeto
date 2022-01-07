@@ -8,11 +8,6 @@
 	color: gray;
 }
 
-.d3-test {
-	text-align: center;
-	justify-content: center;
-}
-
 .graph {
 	margin-top: 50px;
 }
@@ -22,105 +17,19 @@
 	margin-bottom: 30px;
 }
 
-
-body {
-	font-family: "Open Sans", sans-serif;
-}
-
-div#layout {
-	text-align: center;
-}
-
-div#container {
-	width: 1000px;
-	height: 600px;
-	margin: auto;
-	background-color: #2f4a6d;
-}
-
 svg {
 	width: 100%;
 	height: 100%;
-}
-
-.bar {
-	fill: #80cbc4;
-}
-
-text {
-	font-size: 12px;
-}
-/* 
-path {
-	stroke: gray;
-} */
-
-line {
-	stroke: gray;
-}
-
-line#limit {
-	stroke: #fed966;
-	stroke-width: 3;
-	stroke-dasharray: 3 6;
-}
-
-.grid path {
-	stroke-width: 0;
-}
-
-.grid .tick line {
-	stroke: #9faaae;
-	stroke-opacity: 0.3;
-}
-
-text.divergence {
-	font-size: 14px;
-	fill: #2f4a6d;
-}
-
-text.value {
-	font-size: 14px;
-}
-
-text.title {
-	font-size: 22px;
-	font-weight: 600;
-}
-
-text.label {
-	font-size: 14px;
-	font-weight: 400;
-}
-
-text.source {
-	font-size: 10px;
-}
-
-.myXaxis g text{
-    transform: rotate(-45deg);
-    text-anchor: end;
-}
-
-.myXaxis_line g text{
-    transform: rotate(-45deg);
-    text-anchor: end;
-}
-
-.checkboxes {
-	align-self: center;
 }
 
 .cities_text {
 	font-size: 9px;
 }
 
-#linechart_div {
-	margin-top: 50px;
+.checkboxes {
+	align-self: center;
 }
-.piecontainer{
-	margin: auto;
-  	width: 50%;
-	  padding: 10px;
 
- }
+#linechart_div {
+	margin-top: 100px;
+}

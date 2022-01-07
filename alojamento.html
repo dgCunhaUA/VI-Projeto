@@ -33,16 +33,10 @@
 
 		<div class="container">
 			<div class="title">
-				<h1>
-					Capacidade nos alojamentos turísticos: total e por tipo de
-					alojamento
-				</h1>
+				<h1>Capacidade nos alojamentos turísticos: total</h1>
 			</div>
 			<div class="subtitle">
-				<h4>
-					Onde existem mais e menos hotéis e outros alojamentos
-					turísticos?
-				</h4>
+				<h4>Onde existem mais e menos alojamentos turísticos?</h4>
 			</div>
 		</div>
 
@@ -69,9 +63,9 @@
 		///////////////////////
 
 		// set the dimensions and margins of the graph
-		var margin = { top: 10, right: 30, bottom: 100, left: 50 },
+		var margin = { top: 10, right: 30, bottom: 210, left: 100 },
 			width = 560 - margin.left - margin.right,
-			height = 550 - margin.top - margin.bottom;
+			height = 650 - margin.top - margin.bottom;
 
 		// append the svg object to the body of the page
 		var svg = d3
@@ -84,6 +78,14 @@
 				"transform",
 				"translate(" + margin.left + "," + margin.top + ")"
 			);
+
+		svg.append("text")
+			.attr("transform", "rotate(-90)")
+			.attr("y", 0 - margin.left + 20)
+			.attr("x", 0 - height / 2)
+			.attr("dy", "1em")
+			.style("text-anchor", "middle")
+			.text("Capacidade - Cama");
 
 		// Parse the Data
 		d3.csv("files/capacidade_alojamentos.csv", function (data) {

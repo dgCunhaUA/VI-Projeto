@@ -448,7 +448,7 @@
 					top: 10,
 					right: 30,
 					bottom: 30,
-					left: 70,
+					left: 90,
 				},
 				line_chart_width =
 					950 - line_chart_margin.left - line_chart_margin.right,
@@ -480,6 +480,24 @@
 						line_chart_margin.top +
 						")"
 				);
+
+			line_chart_svg
+				.append("text")
+				.attr("x", line_chart_width / 2)
+				.attr("y", line_chart_height + line_chart_margin.bottom+10)
+				.style("text-anchor", "middle")
+				.style("font-size", "11px")
+				.text("Ano");
+
+			line_chart_svg
+				.append("text")
+				.attr("transform", "rotate(-90)")
+				.attr("y", 0 - line_chart_margin.left)
+				.attr("x", 0 - line_chart_height / 2)
+				.attr("dy", "1em")
+				.style("text-anchor", "middle")
+				.style("font-size", "11px")
+				.text("Euro - Milhares");
 
 			//Read the data
 			d3.csv(
@@ -653,6 +671,13 @@
 				"translate(" + margin.left + "," + margin.top + ")"
 			);
 
+		svg.append("text")
+			.attr("x", width / 2)
+			.attr("y", height + margin.bottom -20)
+			.style("text-anchor", "middle")
+			.style("font-size", "10px")
+			.text("Euro");
+
 		var x = d3.scaleLinear().domain([0, 10000]).range([0, width]);
 		var xAxis = svg
 			.append("g")
@@ -699,7 +724,8 @@
 					.style("text-anchor", "end")
 					.attr("dx", "-.8em")
 					.attr("dy", ".15em")
-					.attr("transform", "rotate(-65)");
+					.attr("transform", "rotate(-65)")
+					.attr("font-size", "12px");
 
 				// Update y axis
 				y.domain(
@@ -707,7 +733,7 @@
 						return d.type;
 					})
 				);
-				yAxis.transition().duration(1000).call(d3.axisLeft(y));
+				yAxis.transition().duration(1000).call(d3.axisLeft(y)).attr("font-size", "12px");
 
 				//  updateBarPlot bars
 				var u = svg.selectAll("rect").data(data);
@@ -725,7 +751,6 @@
 					})
 					.attr("height", y.bandwidth())
 					.attr("fill", "#69b3a2");
-
 			});
 		}
 
