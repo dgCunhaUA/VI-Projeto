@@ -34,6 +34,44 @@
 		</nav>
 
 		<div class="container">
+			<div class="row filters">
+				<div class="col-6">
+					<select
+						class="form-select"
+						aria-label="Seleciona o ano"
+						id="year-select"
+						onChange="onChange()"
+					>
+						<option selected value="2020">
+							2020
+						</option>
+						<option value="2019">2019</option>
+						<option value="2018">2018</option>
+					</select>
+				</div>
+				<div class="col-6">
+					<select
+						class="form-select"
+						aria-label="Seleciona a regiao"
+						id="region-select"
+						onChange="onChange()"
+					>
+						<option
+							value="Portugal"
+							selected
+						>
+							Portugal
+						</option>
+						<option
+							value="Norte"
+						>
+							Norte
+						</option>
+						<option value="Centro">Centro</option>
+						<option value="Area">Area...</option>
+					</select>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-6">
 					<div class="title">
@@ -43,6 +81,56 @@
 						<h4>
 							Onde há mais e menos pessoas a fazerem viagens
 							turísticas, por faixas etárias
+						</h4>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="title">
+						<h1>
+							População residente que viajou em turismo: por
+							condição perante o trabalho
+						</h1>
+					</div>
+					<div class="subtitle">
+						<h4>
+							Onde é maior e menor a percentagem de turistas do
+							país que é empregada, desempregada estudante ou
+							reformada?
+						</h4>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-6">
+					<div class="graph container">
+						<!-- Create a div where the graph will take place -->
+						<div id="histogram_div"></div>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="graph container">
+						<!-- Create a div where the graph will take place -->
+						<div id="treemap"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-6">
+					<div class="title">
+						<h1>
+							População residente que viajou em turismo: total e
+							por sexo
+						</h1>
+					</div>
+					<div class="subtitle">
+						<h4>
+							Onde há, mais e menos, homens ou mulheres fazem
+							viagens turísticas?
 						</h4>
 					</div>
 				</div>
@@ -61,62 +149,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="row filters">
-				<div class="col-md-4">
-					<select
-						class="form-select"
-						aria-label="Seleciona o ano"
-						id="year-select"
-					>
-						<option selected value="2020" onclick="onSelect()">
-							2020
-						</option>
-						<option value="2019" onclick="onSelect()">2019</option>
-						<option value="2018">2018</option>
-					</select>
-				</div>
-				<div class="col-md-4">
-					<select
-						class="form-select"
-						aria-label="Seleciona a regiao"
-						id="region-select"
-					>
-						<option
-							value="files/viagens_grupo_etario_portugal.csv"
-							selected
-							onclick="onSelect()"
-						>
-							Portugal
-						</option>
-						<option
-							value="files/viagens_grupo_etario_norte.csv"
-							onclick="onSelect()"
-						>
-							Norte
-						</option>
-						<option value="Centro">Centro</option>
-						<option value="Area">Area...</option>
-					</select>
-				</div>
-				<div class="col-md-4">
-					<button id="sort_button" class="btn btn-primary">
-						Ordenar
-					</button>
-				</div>
-			</div>
-		</div>
-
-		<div class="container">
-			<div class="row">
-				<div class="col-6">
-					<div class="graph container">
-						<!-- Create a div where the graph will take place -->
-						<div id="histogram_div"></div>
+			<div class="graph">
+				<div class="row">
+					<div class="col-6">
+						<div id="piechart"></div>
 					</div>
-				</div>
-				<div class="col-6">
-					<div class="graph container">
-						<!-- Create a div where the graph will take place -->
+					<div class="col-6">
 						<div id="my_dataviz"></div>
 					</div>
 				</div>
@@ -124,6 +162,174 @@
 		</div>
 	</body>
 	<script>
+		// set the dimensions and margins of the graph
+		var margin = { top: 10, right: 10, bottom: 10, left: 10 },
+			width = 445 - margin.left - margin.right,
+			height = 445 - margin.top - margin.bottom;
+
+		// append the svg object to the body of the page
+		var treemap_svg = d3
+			.select("#treemap")
+			.append("svg")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+			.append("g")
+			.attr(
+				"transform",
+				"translate(" + margin.left + "," + margin.top + ")"
+			);
+
+		function update_treemap(filename) {
+			// Read data
+			d3.csv("files/" + filename, function (data) {
+				// stratify the data: reformatting for d3.js
+				var root = d3
+					.stratify()
+					.id(function (d) {
+						return d.name;
+					}) // Name of the entity (column name is name in csv)
+					.parentId(function (d) {
+						return d.parent;
+					})(
+					// Name of the parent (column name is parent in csv)
+					data
+				);
+				root.sum(function (d) {
+					return +d.value;
+				}); // Compute the numeric value for each entity
+
+				// Then d3.treemap computes the position of each element of the hierarchy
+				// The coordinates are added to the root object above
+				d3.treemap().size([width, height]).padding(4)(root);
+
+				treemap_svg.selectAll("rect").remove();
+				treemap_svg.selectAll("text").remove();
+
+				// use this information to add rectangles:
+				treemap_svg
+					.selectAll("rect")
+					.data(root.leaves())
+					.enter()
+					.append("rect")
+					.attr("x", function (d) {
+						return d.x0;
+					})
+					.attr("y", function (d) {
+						return d.y0;
+					})
+					.attr("width", function (d) {
+						return d.x1 - d.x0;
+					})
+					.attr("height", function (d) {
+						return d.y1 - d.y0;
+					})
+					.style("stroke", "black")
+					.style("fill", "#69b3a2");
+
+				// and to add the text labels
+				treemap_svg
+					.selectAll("text")
+					.data(root.leaves())
+					.enter()
+					.append("text")
+					.attr("x", function (d) {
+						return d.x0 + 10;
+					}) // +10 to adjust position (more right)
+					.attr("y", function (d) {
+						return d.y0 + 20;
+					}) // +20 to adjust position (lower)
+					.text(function (d) {
+						return d.data.name + ": " + d.data.value + "%";
+					})
+					.attr("font-size", "15px")
+					.attr("fill", "white");
+			});
+		}
+		update_treemap("treemap_2020_Portugal.csv");
+
+		// set the dimensions and margins of the graph
+		var width = 450;
+		height = 450;
+		margin = 40;
+
+		// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+		var radius = Math.min(width, height) / 2 - margin;
+
+		// append the pie_svg object to the div called 'my_dataviz'
+		var pie_svg = d3
+			.select("#piechart")
+			.append("svg")
+			.attr("width", width)
+			.attr("height", height)
+			.append("g")
+			.attr(
+				"transform",
+				"translate(" + width / 2 + "," + height / 2 + ")"
+			);
+
+		// create 2 data_set
+		var data_2020_Portugal = { Masculino: 47.8, Feminino: 52.1 };
+		var data_2020_Norte = { Masculino: 48.6, Feminino: 51.4 };
+		var data_2019_Portugal = { Masculino: 46.9, Feminino: 53.1 };
+
+		// A function that create / update_pie_chart the plot for a given variable:
+		function update_pie_chart(data) {
+			// Compute the position of each group on the pie:
+			var pie = d3
+				.pie()
+				.value(function (d) {
+					return d.value;
+				})
+				.sort(function (a, b) {
+					return d3.ascending(a.key, b.key);
+				}); // This make sure that group order remains the same in the pie chart
+			var data_ready = pie(d3.entries(data));
+
+			// map to data
+			var u = pie_svg.selectAll("path").data(data_ready);
+
+			// Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+			u.enter()
+				.append("path")
+				.merge(u)
+				.transition()
+				.duration(1000)
+				.attr("d", d3.arc().innerRadius(0).outerRadius(radius))
+				.attr("fill", function (d) {
+					if (d.data.key == "Masculino") return "#39CCCC";
+					else return "#ff8da1";
+				})
+				.attr("stroke", "white")
+				.style("stroke-width", "2px")
+				.style("opacity", 1);
+
+			// remove the group that is not present anymore
+			u.exit().remove();
+
+			var arcGenerator = d3.arc().innerRadius(0).outerRadius(radius);
+
+			pie_svg.selectAll("text").remove();
+
+			pie_svg
+				.selectAll("mySlices")
+				.enter()
+				.data(data_ready)
+				.enter()
+				.append("text")
+				.text(function (d) {
+					return d.data.key;
+				})
+				.attr("transform", function (d) {
+					return "translate(" + arcGenerator.centroid(d) + ")";
+				})
+				.style("text-anchor", "middle")
+				.style("font-size", 18)
+				.style("font-weight", 700);
+		}
+
+		// Initialize the plot with the first dataset
+		update_pie_chart(data_2020_Portugal);
+
 		//////////////////
 		//	Histogram
 		/////////////////
@@ -175,7 +381,7 @@
 		//	Stacked barplot with tooltip
 		///////////////////////////////////////
 		// set the dimensions and margins of the graph
-		var margin = { top: 10, right: 30, bottom: 180, left: 50 },
+		var margin = { top: 10, right: 30, bottom: 40, left: 50 },
 			width = 460 - margin.left - margin.right,
 			height = 500 - margin.top - margin.bottom;
 
@@ -227,12 +433,6 @@
 				])
 				.range([height, 0]);
 			svg.append("g").attr("class", "myYaxis").call(d3.axisLeft(y));
-
-			console.log(
-				d3.max(data, function (d) {
-					return parseInt(d["Feminino"]) + parseInt(d["Masculino"]);
-				})
-			);
 
 			// color palette = one color per subgroup
 			var color = d3
@@ -440,7 +640,7 @@
 		// A function that create / update_histogram the plot for a given variable:
 		function update_histogram(selectedVar, filename, sortOrder) {
 			// Parse the Data
-			d3.csv(filename, function (data) {
+			d3.csv("files/"+filename, function (data) {
 				if (sortOrder != undefined) {
 					data.sort((a, b) => {
 						if (sortOrder) {
@@ -496,17 +696,21 @@
 
 		d3.select("#sort_button").on("click", function (e, d) {});
 
-		function onSelect(filename) {
+		function onChange() {
 			var year = document.getElementById("year-select").value;
 			var region = document.getElementById("region-select").value;
-			update_histogram(year, region, undefined);
+
+			console.log(year, region)
+			update_histogram(year, "viagens_grupo_etario_"+region+".csv", undefined);
 			update_bar_plot_stacked("viagens_por_genero_" + year + ".csv");
+			update_pie_chart(eval("data_" + year + "_" + region));
+			update_treemap("treemap_" + year + "_" + region+".csv");
 		}
 
 		// Initialize plot
 		update_histogram(
 			"2020",
-			"files/viagens_grupo_etario_portugal.csv",
+			"viagens_grupo_etario_Portugal.csv",
 			undefined
 		);
 	</script>
