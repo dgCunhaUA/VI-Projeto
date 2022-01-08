@@ -33,7 +33,7 @@
 
 		<div class="container">
 			<div class="title">
-				<h1>Capacidade nos alojamentos turísticos: total</h1>
+				<h1>Capacidade nos alojamentos turísticos</h1>
 			</div>
 			<div class="subtitle">
 				<h4>Onde existem mais e menos alojamentos turísticos?</h4>
@@ -43,12 +43,14 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-6">
+					<p class="source">Fontes/Entidades: INE, PORDATA</p>
 					<div class="graph container">
 						<!-- Create a div where the graph will take place -->
 						<div id="groupedbarplot_div"></div>
 					</div>
 				</div>
 				<div class="col-6">
+					<p class="source2">Fontes/Entidades: INE, PORDATA</p>
 					<div class="graph container">
 						<!-- Create a div where the graph will take place -->
 						<svg id="map" width="640" height="450"></svg>
@@ -85,7 +87,8 @@
 			.attr("x", 0 - height / 2)
 			.attr("dy", "1em")
 			.style("text-anchor", "middle")
-			.text("Capacidade - Cama");
+			.text("Capacidade - Cama")
+			.style("font-size", "13px");
 
 		// Parse the Data
 		d3.csv("files/capacidade_alojamentos.csv", function (data) {

@@ -4,19 +4,15 @@
 }
 
 .subtitle {
+	margin-top: 70px;
+	margin-bottom: 40px;
 	text-align: center;
 	color: gray;
 }
 
-.d3-test {
-	text-align: center;
-	justify-content: center;
+.container {
+	max-width: 1500px !important;
 }
-
-/* .graph {
-	height: 100%;
-	margin-top: 50px;
-} */
 
 .filters {
 	text-align: center;
@@ -24,78 +20,23 @@
 	margin-top: 40px;
 }
 
-
-body {
-	font-family: "Open Sans", sans-serif;
-}
-
-div#layout {
-	text-align: center;
-}
-
-div#container {
-	width: 1000px;
-	height: 600px;
-	margin: auto;
-	background-color: #2f4a6d;
-}
-
-.bar {
-	fill: #80cbc4;
-}
-
 text {
-	font-size: 12px;
+	font-size: 13px;
 }
 
-path {
-	stroke: gray;
+.myXaxis g text {
+	transform: rotate(-45deg);
+	text-anchor: end;
 }
 
-line {
-	stroke: gray;
+div {
+	position: relative;
 }
 
-line#limit {
-	stroke: #fed966;
-	stroke-width: 3;
-	stroke-dasharray: 3 6;
-}
-
-.grid path {
-	stroke-width: 0;
-}
-
-.grid .tick line {
-	stroke: #9faaae;
-	stroke-opacity: 0.3;
-}
-
-text.divergence {
-	font-size: 14px;
-	fill: #2f4a6d;
-}
-
-text.value {
-	font-size: 14px;
-}
-
-text.title {
-	font-size: 22px;
-	font-weight: 600;
-}
-
-text.label {
-	font-size: 14px;
-	font-weight: 400;
-}
-
-text.source {
-	font-size: 10px;
-}
-
-
-.myXaxis g text{
-    transform: rotate(-45deg);
-    text-anchor: end;
+.source {
+	font-size: 9px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	margin-right: 40px;
 }

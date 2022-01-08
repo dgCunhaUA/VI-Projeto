@@ -8,20 +8,32 @@
 	color: gray;
 }
 
-.d3-test {
-	text-align: center;
-	justify-content: center;
-}
-
 .graph {
 	margin-top: 50px;
-}
-
-.filters {
-	text-align: center;
-	margin-bottom: 30px;
 }
 
 .cities_text {
 	font-size: 9px;
 }
+
+div {
+	position: relative;
+}
+
+.source {
+	font-size: 9px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	margin-right: 40px;
+}
+
+.source2 {
+	font-size: 9px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	margin-right: 0px;
+	margin-bottom: 80px;
+}
+

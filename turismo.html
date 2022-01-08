@@ -62,29 +62,22 @@
 				</div>
 			</div>
 			<div class="row">
+				<div class="title">
+					<h1>População residente que viajou em turismo</h1>
+				</div>
 				<div class="col-6">
-					<div class="title">
-						<h1>População residente que viajou em turismo</h1>
-					</div>
 					<div class="subtitle">
 						<h4>
-							Onde há mais e menos pessoas a fazerem viagens
-							turísticas, por faixas etárias
+							Quais as faixas etarias onde há mais e menos pessoas
+							a fazerem viagens turísticas?
 						</h4>
 					</div>
 				</div>
 				<div class="col-6">
-					<div class="title">
-						<h1>
-							População residente que viajou em turismo: por
-							condição perante o trabalho
-						</h1>
-					</div>
 					<div class="subtitle">
 						<h4>
-							Onde é maior e menor a percentagem de turistas do
-							país que é empregada, desempregada estudante ou
-							reformada?
+							Qual a percentagem de turistas do pais que é
+							empregada, desempregada estudante ou reformada?
 						</h4>
 					</div>
 				</div>
@@ -94,12 +87,14 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-6">
+					<p class="source">Fontes/Entidades: INE, PORDATA</p>
 					<div class="graph container">
 						<!-- Create a div where the graph will take place -->
 						<div id="histogram_div"></div>
 					</div>
 				</div>
 				<div class="col-6">
+					<p class="source">Fontes/Entidades: INE, PORDATA</p>
 					<div class="graph container">
 						<!-- Create a div where the graph will take place -->
 						<div id="treemap"></div>
@@ -110,29 +105,30 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-6">
-					<div class="title">
+					<!-- <div class="title">
 						<h1>
 							População residente que viajou em turismo: total e
 							por sexo
 						</h1>
-					</div>
+					</div> -->
 					<div class="subtitle">
 						<h4>
-							Onde há, mais e menos, homens ou mulheres fazem
-							viagens turísticas?
+							<!-- Onde há, mais e menos, homens ou mulheres fazem
+							viagens turísticas? -->
+							Qual o género a fazer mais viagens turísticas?
 						</h4>
 					</div>
 				</div>
 				<div class="col-6">
-					<div class="title">
+					<!-- <div class="title">
 						<h1>
 							População residente que viajou em turismo: total e
 							por sexo
 						</h1>
-					</div>
+					</div> -->
 					<div class="subtitle">
 						<h4>
-							Onde há, mais e menos, homens ou mulheres fazem
+							Onde há, mais e menos, homens ou mulheres que fazem
 							viagens turísticas?
 						</h4>
 					</div>
@@ -141,9 +137,11 @@
 			<div class="graph">
 				<div class="row">
 					<div class="col-6">
+						<p class="source">Fontes/Entidades: INE, PORDATA</p>
 						<div id="piechart"></div>
 					</div>
 					<div class="col-6">
+						<p class="source">Fontes/Entidades: INE, PORDATA</p>
 						<div id="my_dataviz"></div>
 					</div>
 				</div>
@@ -209,13 +207,14 @@
 				treemap_svg.selectAll("rect").remove();
 				treemap_svg.selectAll("text").remove();
 
-				var colorScale = d3.scaleLinear()
+				var colorScale = d3
+					.scaleLinear()
 					//.range(["lightskyblue", "blue"]) // or use hex values
 					.range(["lightgreen", "darkgreen"]) // or use hex values
 					//.range(["lightsalmon", "orange"])
 					.domain([0, 80]);
 
-				console.log(colorScale)
+				console.log(colorScale);
 
 				// use this information to add rectangles:
 				treemap_svg
@@ -237,7 +236,7 @@
 					})
 					.style("stroke", "black")
 					.style("fill", function (d) {
-						console.log(d)
+						console.log(d);
 						return colorScale(d.value);
 					});
 
@@ -370,12 +369,12 @@
 					.transition()
 					.duration(1000)
 					.attr("x", function (d) {
-						return x(d.group);
+						return x(d.group) + 1;
 					})
 					.attr("y", function (d) {
 						return y(d[selectedVar]);
 					})
-					.attr("width", x.bandwidth())
+					.attr("width", x.bandwidth() - 1)
 					.attr("height", function (d) {
 						return height_histogram - y(d[selectedVar]);
 					})
