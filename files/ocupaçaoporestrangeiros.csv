@@ -1,8 +1,8 @@
-country,2020,2019
-Norte,30.5,52.8
-Centro,18.9,39.7
-Lisboa, 54.5,72.9
-Alentejo,17.4,34.1
-Algarve,46.4,70.9
-Açores,24.4,49.6
-Madeira,63.8,78.2
+country,2020,2019,2018
+Norte,30.5,52.8,51.2
+Centro,18.9,39.7,40,3
+Lisboa, 54.5,72.9,72.7
+Alentejo,17.4,34.1,35.4
+Algarve,46.4,70.9,71.2
+Açores,24.4,49.6,50.6
+Madeira,63.8,78.2,80.6

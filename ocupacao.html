@@ -46,7 +46,7 @@
 					</div>
 					<div class="subtitle">
 						<h4>
-							Quantas noites passam os turistas em estabelecimentos hoteleiros como hotéis e pensões, por país de origem?
+							Turistas por país que passam mais noites em estabelecimentos hoteleiros em 2019.
 						</h4>
 					</div>
 				</div>
@@ -67,13 +67,16 @@
 			<div class="row">
 				<div class="col-6">
 					<div class="graph container">
+						<p class="source">Fontes/Entidades: INE, PORDATA</p>
 						<!-- Create a div where the graph will take place -->
 						<div id="my_dataviz"></div>
 					</div>
 				</div>
 				<div class="col-6">
 					<div class="graph container">
+						<p class="source">Fontes/Entidades: INE, PORDATA</p>
 						<!-- Add 2 buttons -->
+						<button class="btn btn-primary" onclick="update_lollipop('2018')">2018</button>
 						<button class="btn btn-primary" onclick="update_lollipop('2019')">2019</button>
 						<button class="btn btn-primary" onclick="update_lollipop('2020')">2020</button>
 						
@@ -172,52 +175,61 @@
 		const yAxis = svg_lollipop.append("g")
 		.attr("class", "myYaxis")
 
+		// text label for the y axis
+		svg_lollipop.append("text")
+		.attr("transform", "rotate(-90)")
+		.attr("y", 0 - margin_lollipop.left)
+		.attr("x",0 - (height_lollipop / 2))
+		.attr("dy", "1em")
+		.style("text-anchor", "middle")
+		.text("Hóspedes Estrangeiros (%)");      
+
 
 		// A function that create / update the plot for a given variable:
 		function update_lollipop(selectedVar) {
 
-		// Parse the Data
-		d3.csv("files/ocupaçaoporestrangeiros.csv").then( function(data) {
+			// Parse the Data
+			d3.csv("files/ocupaçaoporestrangeiros.csv").then( function(data) {
 
-			// X axis
-			x.domain(data.map(function(d) { return d.country; }))
-			xAxis.transition().duration(1000).call(d3.axisBottom(x))
+				// X axis
+				x.domain(data.map(function(d) { return d.country; }))
+				xAxis.transition().duration(1000).call(d3.axisBottom(x))
 
-			// Add Y axis
-			y.domain([0, d3.max(data, function(d) { return +d[selectedVar] }) ]);
-			yAxis.transition().duration(1000).call(d3.axisLeft(y));
+				// Add Y axis
+				y.domain([0, d3.max(data, function(d) { return +d[selectedVar] }) ]);
+				yAxis.transition().duration(1000).call(d3.axisLeft(y));
 
-			// variable u: map data to existing circle
-			const j = svg_lollipop.selectAll(".myLine")
-			.data(data)
-			// update lines
-			j
-			.join("line")
-			.attr("class", "myLine")
-			.transition()
-			.duration(1000)
-				.attr("x1", function(d) { return x(d.country); })
-				.attr("x2", function(d) { return x(d.country); })
-				.attr("y1", y(0))
-				.attr("y2", function(d) { return y(d[selectedVar]); })
-				.attr("stroke", "grey")
-
-
-			// variable u: map data to existing circle
-			const u = svg_lollipop.selectAll("circle")
-			.data(data)
-			// update bars
-			u
-			.join("circle")
-			.transition()
-			.duration(1000)
-				.attr("cx", function(d) { return x(d.country); })
-				.attr("cy", function(d) { return y(d[selectedVar]); })
-				.attr("r", 8)
-				.attr("fill", "#69b3a2");
+				// variable u: map data to existing circle
+				const j = svg_lollipop.selectAll(".myLine")
+				.data(data)
+				// update lines
+				j
+				.join("line")
+				.attr("class", "myLine")
+				.transition()
+				.duration(1000)
+					.attr("x1", function(d) { return x(d.country); })
+					.attr("x2", function(d) { return x(d.country); })
+					.attr("y1", y(0))
+					.attr("y2", function(d) { return y(d[selectedVar]); })
+					.attr("stroke", "grey")
+					
 
 
-		})
+				// variable u: map data to existing circle
+				const u = svg_lollipop.selectAll("circle")
+				.data(data)
+				// update bars
+				u
+				.join("circle")
+				.transition()
+				.duration(1000)
+					.attr("cx", function(d) { return x(d.country); })
+					.attr("cy", function(d) { return y(d[selectedVar]); })
+					.attr("r", 8)
+					.attr("fill", "#69b3a2");
+		
+			})
 
 		}
 
