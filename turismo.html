@@ -388,9 +388,9 @@
 		//	Stacked barplot with tooltip
 		///////////////////////////////////////
 		// set the dimensions and margins of the graph
-		var margin = { top: 30, right: 0, bottom: 160, left: 100 },
+		var margin = { top: 30, right: 5, bottom: 160, left: 100 },
 			width_stacked = 600 - margin.left - margin.right,
-			height = 600 - margin.top - margin.bottom;
+			height = 700 - margin.top - margin.bottom;
 
 		// append the svg object to the body of the page
 		var svg = d3
@@ -462,9 +462,9 @@
 			// Create a tooltip
 			// ----------------
 			var tooltip = d3
-				.select("#my_dataviz")
+				.select("body")
 				.append("div")
-				.style("opacity", 0)
+				.style("opacity", 1)
 				.attr("id", "stacked_tooltip")
 				.attr("class", "tooltip")
 				.style("background-color", "white")
@@ -491,7 +491,7 @@
 							"Total: " +
 							total
 					)
-					.style("opacity", 1);
+					.style("display", "");
 			};
 			var mousemove = function (d) {
 				let pos = d3.select(this).node().getBoundingClientRect();
@@ -501,7 +501,7 @@
 					.style("top", `${window.pageYOffset + pos["y"] - 50}px`);
 			};
 			var mouseleave = function (d) {
-				tooltip.style("opacity", 0);
+				tooltip.style("display", "none");
 			};
 
 			// Show the bars
@@ -600,7 +600,7 @@
 								"Value: " +
 								subgroupValue
 						)
-						.style("opacity", 1);
+						.style("display", "");
 				};
 				var mousemove = function (d) {
 					let pos = d3.select(this).node().getBoundingClientRect();
@@ -613,7 +613,7 @@
 						);
 				};
 				var mouseleave = function (d) {
-					tooltip.style("opacity", 0);
+					tooltip.style("display", "none");
 				};
 
 				svg.selectAll("rect").remove();

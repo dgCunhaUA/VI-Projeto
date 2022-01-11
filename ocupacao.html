@@ -29,12 +29,8 @@
 			<a href="/ocupacao.html" class="active"
 				>Ocupação de Alojamentos Turísticos</a
 			>
-			<a href="/turismo.html"
-				>Turismo da População Residente</a
-			>
-			<a href="/receitas.html"
-				>Receitas de Alojamentos Turísticos</a
-			>
+			<a href="/turismo.html">Turismo da População Residente</a>
+			<a href="/receitas.html">Receitas de Alojamentos Turísticos</a>
 			<div id="dot"></div>
 		</nav>
 
@@ -42,23 +38,37 @@
 			<div class="row">
 				<div class="col-6">
 					<div class="title">
-						<h1>Dormidas nos alojamentos turísticos: total e por país de residência do hóspede</h1>
-					</div>
-					<div class="subtitle">
-						<h4>
-							Turistas por país que passam mais noites em estabelecimentos hoteleiros em 2019.
-						</h4>
+						<h1>
+							Dormidas nos alojamentos turísticos: total e por
+							país de residência do hóspede
+						</h1>
 					</div>
 				</div>
 				<div class="col-6">
 					<div class="title">
 						<h1>
-							Proporção de hóspedes estrangeiros nos alojamentos turísticos
+							Proporção de hóspedes estrangeiros nos alojamentos
+							turísticos
 						</h1>
 					</div>
-					<div class="subtitle">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-6">
+					<div class="subtitle" style="margin-top: 50px">
 						<h4>
-							Onde existe maior e menor percentagem de turistas, a viver no estrangeiro, nos estabelecimentos hoteleiros como pensões ou hotéis?</h4>
+							Turistas por país que passam mais noites em
+							estabelecimentos hoteleiros em 2019.
+						</h4>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="subtitle" style="margin-top: 50px">
+						<h4>
+							Onde existe maior e menor percentagem de turistas, a
+							viver no estrangeiro, nos estabelecimentos
+							hoteleiros como pensões ou hotéis?
+						</h4>
 					</div>
 				</div>
 			</div>
@@ -75,56 +85,64 @@
 				<div class="col-6">
 					<p class="source">Fontes/Entidades: INE, PORDATA</p>
 					<div class="graph_container">
-						<div class = "graph">
-							<!-- Add 2 buttons -->
-							<button class="btn btn-primary" onclick="update_lollipop('2018')">2018</button>
-							<button class="btn btn-primary" onclick="update_lollipop('2019')">2019</button>
-							<button class="btn btn-primary" onclick="update_lollipop('2020')">2020</button>
-							
+						<div class="graph">
+							<select
+								class="form-select"
+								aria-label="Seleciona o ano"
+								id="year-select"
+								style="width: 50%; margin: auto"
+							>
+								<option selected value="2020" onclick="update_lollipop('2020')">2020</option>
+								<option value="2019" onclick="update_lollipop('2019')">2019</option>
+								<option value="2018" onclick="update_lollipop('2018')">2018</option>
+							</select>
 							<!-- Create a div where the graph will take place -->
-						<div id="my_dataviz2"></div>
+							<div id="my_dataviz2"></div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-	
 	</body>
 
 	<script>
-
 		//Circular Barplot
 		// set the dimensions and margins of the graph
-		const margin = {top: 100, right: 0, bottom: 0, left: 0},
-			width = 460 - margin.left - margin.right,
+		const margin = { top: 100, right: 0, bottom: 0, left: 0 },
+			width = 500 - margin.left - margin.right,
 			height = 460 - margin.top - margin.bottom,
 			innerRadius = 90,
-			outerRadius = Math.min(width, height) / 2;   // the outerRadius goes from the middle of the SVG area to the border
+			outerRadius = Math.min(width, height) / 2; // the outerRadius goes from the middle of the SVG area to the border
 
 		// append the svg object
-		const svg = d3.select("#my_dataviz")
-		.append("svg")
+		const svg = d3
+			.select("#my_dataviz")
+			.append("svg")
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom)
-		.append("g")
-			.attr("transform", `translate(${width/2+margin.left}, ${height/2+margin.top})`);
+			.append("g")
+			.attr(
+				"transform",
+				`translate(${width / 2 + margin.left + 90}, ${
+					height / 2 + margin.top
+				})`
+			);
 
-		d3.csv("files/dormidas_país.csv").then( function(data) {
-
+		d3.csv("files/dormidas_país.csv").then(function (data) {
 			// sort data
-			data.sort(function(b, a) {
+			data.sort(function (b, a) {
 				return a.Value - b.Value;
 			});
 
-
 			// Scales
-			const x = d3.scaleBand()
-				.range([0, 2 * Math.PI])    // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
-				.align(0)                  // This does nothing
-				.domain(data.map(d => d.Country)); // The domain of the X axis is the list of states.
-			const y = d3.scaleRadial()
-				.range([innerRadius, outerRadius])   // Domain will be define later.
+			const x = d3
+				.scaleBand()
+				.range([0, 2 * Math.PI]) // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
+				.align(0) // This does nothing
+				.domain(data.map((d) => d.Country)); // The domain of the X axis is the list of states.
+			const y = d3
+				.scaleRadial()
+				.range([innerRadius, outerRadius]) // Domain will be define later.
 				.domain([0, 12000000]); // Domain of Y is from 0 to the max seen in the data
 
 			// Add the bars
@@ -133,118 +151,162 @@
 				.data(data)
 				.join("path")
 				.attr("fill", "#69b3a2")
-				.attr("d", d3.arc()     // imagine your doing a part of a donut plot
-					.innerRadius(innerRadius)
-					.outerRadius(d => y(d['Value']))
-					.startAngle(d => x(d.Country))
-					.endAngle(d => x(d.Country) + x.bandwidth())
-					.padAngle(0.01)
-					.padRadius(innerRadius))
+				.attr(
+					"d",
+					d3
+						.arc() // imagine your doing a part of a donut plot
+						.innerRadius(innerRadius)
+						.outerRadius((d) => y(d["Value"]))
+						.startAngle((d) => x(d.Country))
+						.endAngle((d) => x(d.Country) + x.bandwidth())
+						.padAngle(0.01)
+						.padRadius(innerRadius)
+				);
 
 			// Add the labels
 			svg.append("g")
 				.selectAll("g")
 				.data(data)
 				.join("g")
-					.attr("text-anchor", function(d) { return (x(d.Country) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
-					.attr("transform", function(d) { return "rotate(" + ((x(d.Country) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")"+"translate(" + (y(d['Value'])+10) + ",0)"; })
+				.attr("text-anchor", function (d) {
+					return (x(d.Country) + x.bandwidth() / 2 + Math.PI) %
+						(2 * Math.PI) <
+						Math.PI
+						? "end"
+						: "start";
+				})
+				.attr("transform", function (d) {
+					return (
+						"rotate(" +
+						(((x(d.Country) + x.bandwidth() / 2) * 180) / Math.PI -
+							90) +
+						")" +
+						"translate(" +
+						(y(d["Value"]) + 10) +
+						",0)"
+					);
+				})
 				.append("text")
-					.text(function(d){return(d.Country)})
-					.attr("transform", function(d) { return (x(d.Country) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)"; })
-					.style("font-size", "11px")
-					.attr("alignment-baseline", "middle")
-
+				.text(function (d) {
+					return d.Country;
+				})
+				.attr("transform", function (d) {
+					return (x(d.Country) + x.bandwidth() / 2 + Math.PI) %
+						(2 * Math.PI) <
+						Math.PI
+						? "rotate(180)"
+						: "rotate(0)";
+				})
+				.style("font-size", "11px")
+				.attr("alignment-baseline", "middle");
 		});
 
-
-		//Lollipop Chart 	
+		//Lollipop Chart
 
 		// set the dimensions and margins of the graph
-		const margin_lollipop = {top: 30, right: 30, bottom: 70, left: 60},
-			width_lollipop = 460 - margin_lollipop.left - margin_lollipop.right,
-			height_lollipop = 400 - margin_lollipop.top - margin_lollipop.bottom;
+		const margin_lollipop = { top: 30, right: 30, bottom: 70, left: 60 },
+			width_lollipop = 600 - margin_lollipop.left - margin_lollipop.right,
+			height_lollipop =
+				500 - margin_lollipop.top - margin_lollipop.bottom;
 
 		// append the svg object to the body of the page
-		const svg_lollipop = d3.select("#my_dataviz2")
-		.append("svg")
-			.attr("width", width_lollipop + margin_lollipop.left + margin_lollipop.right)
-			.attr("height", height_lollipop + margin_lollipop.top + margin_lollipop.bottom)
-		.append("g")
-			.attr("transform", `translate(${margin_lollipop.left}, ${margin_lollipop.top})`);
+		const svg_lollipop = d3
+			.select("#my_dataviz2")
+			.append("svg")
+			.attr(
+				"width",
+				width_lollipop + margin_lollipop.left + margin_lollipop.right
+			)
+			.attr(
+				"height",
+				height_lollipop + margin_lollipop.top + margin_lollipop.bottom
+			)
+			.append("g")
+			.attr(
+				"transform",
+				`translate(${margin_lollipop.left + 50}, ${
+					margin_lollipop.top
+				})`
+			);
 
 		// Initialize the X axis
-		const x = d3.scaleBand()
-		.range([ 0, width_lollipop ])
-		.padding(1);
-		const xAxis = svg_lollipop.append("g")
-		.attr("transform", `translate(0, ${height_lollipop})`)
+		const x = d3.scaleBand().range([0, width_lollipop]).padding(1);
+		const xAxis = svg_lollipop
+			.append("g")
+			.attr("transform", `translate(0, ${height_lollipop})`);
 
 		// Initialize the Y axis
-		const y = d3.scaleLinear()
-		.range([ height_lollipop, 0]);
-		const yAxis = svg_lollipop.append("g")
-		.attr("class", "myYaxis")
+		const y = d3.scaleLinear().range([height_lollipop, 0]);
+		const yAxis = svg_lollipop.append("g").attr("class", "myYaxis");
 
 		// text label for the y axis
-		svg_lollipop.append("text")
-		.attr("transform", "rotate(-90)")
-		.attr("y", 0 - margin_lollipop.left)
-		.attr("x",0 - (height_lollipop / 2))
-		.attr("dy", "1em")
-		.style("text-anchor", "middle")
-		.text("Hóspedes Estrangeiros (%)");      
-
+		svg_lollipop
+			.append("text")
+			.attr("transform", "rotate(-90)")
+			.attr("y", 0 - margin_lollipop.left)
+			.attr("x", 0 - height_lollipop / 2)
+			.attr("dy", "1em")
+			.style("text-anchor", "middle")
+			.text("Hóspedes Estrangeiros (%)");
 
 		// A function that create / update the plot for a given variable:
 		function update_lollipop(selectedVar) {
-
 			// Parse the Data
-			d3.csv("files/ocupaçaoporestrangeiros.csv").then( function(data) {
-
+			d3.csv("files/ocupaçaoporestrangeiros.csv").then(function (data) {
 				// X axis
-				x.domain(data.map(function(d) { return d.country; }))
-				xAxis.transition().duration(1000).call(d3.axisBottom(x))
+				x.domain(
+					data.map(function (d) {
+						return d.country;
+					})
+				);
+				xAxis.transition().duration(1000).call(d3.axisBottom(x));
 
 				// Add Y axis
-				y.domain([0, d3.max(data, function(d) { return +d[selectedVar] }) ]);
+				y.domain([
+					0,
+					d3.max(data, function (d) {
+						return +d[selectedVar];
+					}),
+				]);
 				yAxis.transition().duration(1000).call(d3.axisLeft(y));
 
 				// variable u: map data to existing circle
-				const j = svg_lollipop.selectAll(".myLine")
-				.data(data)
+				const j = svg_lollipop.selectAll(".myLine").data(data);
 				// update lines
-				j
-				.join("line")
-				.attr("class", "myLine")
-				.transition()
-				.duration(1000)
-					.attr("x1", function(d) { return x(d.country); })
-					.attr("x2", function(d) { return x(d.country); })
+				j.join("line")
+					.attr("class", "myLine")
+					.transition()
+					.duration(1000)
+					.attr("x1", function (d) {
+						return x(d.country);
+					})
+					.attr("x2", function (d) {
+						return x(d.country);
+					})
 					.attr("y1", y(0))
-					.attr("y2", function(d) { return y(d[selectedVar]); })
-					.attr("stroke", "grey")
-					
-
+					.attr("y2", function (d) {
+						return y(d[selectedVar]);
+					})
+					.attr("stroke", "grey");
 
 				// variable u: map data to existing circle
-				const u = svg_lollipop.selectAll("circle")
-				.data(data)
+				const u = svg_lollipop.selectAll("circle").data(data);
 				// update bars
-				u
-				.join("circle")
-				.transition()
-				.duration(1000)
-					.attr("cx", function(d) { return x(d.country); })
-					.attr("cy", function(d) { return y(d[selectedVar]); })
+				u.join("circle")
+					.transition()
+					.duration(1000)
+					.attr("cx", function (d) {
+						return x(d.country);
+					})
+					.attr("cy", function (d) {
+						return y(d[selectedVar]);
+					})
 					.attr("r", 8)
 					.attr("fill", "#69b3a2");
-		
-			})
-
+			});
 		}
 
 		// Initialize plot
-		update_lollipop('2020')
-
+		update_lollipop("2020");
 	</script>
 </html>
