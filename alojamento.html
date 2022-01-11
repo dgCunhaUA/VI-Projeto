@@ -52,6 +52,17 @@
 				<div class="col-6">
 					<p class="source2">Fontes/Entidades: INE, PORDATA</p>
 					<div class="graph container">
+						<select
+							class="form-select"
+							aria-label="Seleciona o ano"
+							id="year-select"
+							style="width: 50%; margin: auto"
+							onchange="onSelect()"
+						>
+							<option selected value="2020">2020</option>
+							<option value="2019">2019</option>
+							<option value="2018">2018</option>
+						</select>
 						<!-- Create a div where the graph will take place -->
 						<svg id="map" width="640" height="450"></svg>
 					</div>
@@ -217,6 +228,7 @@
 					return d;
 				})
 				.attr("text-anchor", "left")
+				.attr("font-weight", "900")
 				.style("alignment-baseline", "middle");
 		});
 
@@ -238,7 +250,13 @@
 			.translate([map_width / 2, map_height / 2]);
 
 		d3.json("files/prt.json", function (data) {
-			color_scheme = { 1: "#fee8c8", 2: "#fdae6b", 3: "#e6550d" };
+			color_scheme = {
+				1: "#ffd4b1",
+				2: "#fdbe85",
+				3: "#fd8d3c",
+				4: "#e6550d",
+				5: "#a63603",
+			};
 
 			// create a tooltip
 			var Tooltip = d3
@@ -274,8 +292,6 @@
 				map_svg.selectAll(".cities_text").style("display", "");
 			};
 
-			console.log(data.features);
-
 			// Draw the map
 			map_svg
 				.append("g")
@@ -288,17 +304,27 @@
 				// set the color of each district
 				.attr("fill", function (d) {
 					if (
-						d.properties.info[selected_year][0] > 0 &&
-						d.properties.info[selected_year][0] < 500
+						d.properties.info2[selected_year][0] > 0 &&
+						d.properties.info2[selected_year][0] < 4999
 					) {
 						return color_scheme[1];
 					} else if (
-						d.properties.info[selected_year][0] >= 500 &&
-						d.properties.info[selected_year][0] < 1000
+						d.properties.info2[selected_year][0] >= 5000 &&
+						d.properties.info2[selected_year][0] < 11999
 					) {
 						return color_scheme[2];
-					} else {
+					} else if (
+						d.properties.info2[selected_year][0] >= 12000 &&
+						d.properties.info2[selected_year][0] < 24999
+					) {
 						return color_scheme[3];
+					} else if (
+						d.properties.info2[selected_year][0] >= 25000 &&
+						d.properties.info2[selected_year][0] < 100000
+					) {
+						return color_scheme[4];
+					} else if (d.properties.info2[selected_year][0] > 100000) {
+						return color_scheme[5];
 					}
 				})
 				.style("stroke", "white")
@@ -310,6 +336,13 @@
 				.on("mouseover", mouseOver)
 				.on("mouseleave", mouseLeave)
 				.on("mousemove", function (d) {
+					var value1 = d.properties.info2[selected_year][0]
+						.toString()
+						.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+
+					var value2 = d.properties.info2[selected_year][1]
+						.toString()
+						.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 					let pos = d3.select(this).node().getBoundingClientRect();
 					Tooltip.html(
 						d.properties.name +
@@ -317,12 +350,12 @@
 							d.properties.region +
 							"<br>" +
 							"Total: " +
-							d.properties.info[selected_year][0] +
-							"€" +
+							value1 +
+							" camas" +
 							"<br>" +
 							"Hoteis: " +
-							d.properties.info[selected_year][1] +
-							"€"
+							value2 +
+							" camas"
 					)
 						.style("left", `${pos["x"]}px`)
 						.style(
@@ -357,7 +390,13 @@
 
 			// Color scheme legend
 			// create a list of keys
-			var keys = ["0 - 499", "500 - 999", "1000 - 1000+"];
+			var keys = [
+				"0 - 4999",
+				"5000 - 11999",
+				"12000 - 24999",
+				"25000 - 100000",
+				"100000+",
+			];
 
 			// Usually you have a color scale in your chart already
 			var color = d3
@@ -394,7 +433,7 @@
 				.append("text")
 				.attr("x", 100 + size * 1.2)
 				.attr("y", function (d, i) {
-					return 200 + i * (size + 5) + size / 2;
+					return 205 + i * (size + 5) + size / 2;
 				}) // 100 is where the first dot appears. 25 is the distance between dots
 				.style("fill", function (d) {
 					return color(d);
@@ -403,6 +442,16 @@
 					return d;
 				})
 				.attr("text-anchor", "left")
+				.style("alignment-baseline", "middle");
+
+			map_svg
+				.append("text")
+				.attr("x", 100)
+				.attr("y", 180)
+				.style("fill", "black")
+				.text("Capacidade (Cama)")
+				.attr("text-anchor", "left")
+				.attr("font-size", "12")
 				.style("alignment-baseline", "middle");
 		});
 		/////////////////////////////////
@@ -440,22 +489,30 @@
 					.merge(u)
 					.data(data.features)
 					.attr("fill", function (d) {
-						console.log(
-							d.properties.info[selected_year][0],
-							"what"
-						);
 						if (
-							d.properties.info[selected_year][0] > 0 &&
-							d.properties.info[selected_year][0] < 500
+							d.properties.info2[selected_year][0] > 0 &&
+							d.properties.info2[selected_year][0] < 4999
 						) {
 							return color_scheme[1];
 						} else if (
-							d.properties.info[selected_year][0] >= 500 &&
-							d.properties.info[selected_year][0] < 1000
+							d.properties.info2[selected_year][0] >= 5000 &&
+							d.properties.info2[selected_year][0] < 11999
 						) {
 							return color_scheme[2];
-						} else {
+						} else if (
+							d.properties.info2[selected_year][0] >= 12000 &&
+							d.properties.info2[selected_year][0] < 24999
+						) {
 							return color_scheme[3];
+						} else if (
+							d.properties.info2[selected_year][0] >= 25000 &&
+							d.properties.info2[selected_year][0] < 100000
+						) {
+							return color_scheme[4];
+						} else if (
+							d.properties.info2[selected_year][0] > 100000
+						) {
+							return color_scheme[5];
 						}
 					})
 					.style("stroke", "white")
@@ -467,6 +524,13 @@
 					.on("mouseover", mouseOver)
 					.on("mouseleave", mouseLeave)
 					.on("mousemove", function (d) {
+						var value1 = d.properties.info2[selected_year][0]
+							.toString()
+							.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+
+						var value2 = d.properties.info2[selected_year][1]
+							.toString()
+							.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 						let pos = d3
 							.select(this)
 							.node()
@@ -477,12 +541,12 @@
 								d.properties.region +
 								"<br>" +
 								"Total: " +
-								d.properties.info[selected_year][0] +
-								"€" +
+								value1 +
+								" camas" +
 								"<br>" +
 								"Hoteis: " +
-								d.properties.info[selected_year][1] +
-								"€"
+								value2 +
+								" camas"
 						)
 							.style("left", `${pos["x"]}px`)
 							.style(
@@ -491,6 +555,11 @@
 							);
 					});
 			});
+		}
+
+		function onSelect() {
+			var year = document.getElementById("year-select").value;
+			updateMap(year);
 		}
 	</script>
 </html>

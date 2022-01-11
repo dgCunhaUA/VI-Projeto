@@ -157,8 +157,8 @@
 		//	Tree Map
 		/////////////////
 		// set the dimensions and margins of the graph
-		var margin_treemap = { top: 10, right: 90, bottom: 10, left: 0 },
-			width_treemap = 470 - margin_treemap.left - margin_treemap.right,
+		var margin_treemap = { top: 10, right: 95, bottom: 10, left: 95 },
+			width_treemap = 490 - margin_treemap.left - margin_treemap.right,
 			height_treemap = 445 - margin_treemap.top - margin_treemap.bottom;
 
 		// append the svg object to the body of the page
@@ -218,7 +218,6 @@
 					//.range(["lightsalmon", "orange"])
 					.domain([0, 80]);
 
-				console.log(colorScale);
 
 				// use this information to add rectangles:
 				treemap_svg
@@ -240,7 +239,6 @@
 					})
 					.style("stroke", "black")
 					.style("fill", function (d) {
-						console.log(d);
 						return colorScale(d.value);
 					});
 
@@ -556,7 +554,7 @@
 				var x = d3
 					.scaleBand()
 					.domain(groups)
-					.range([0, _stacked])
+					.range([0, width_stacked])
 					.padding([0.2]);
 				svg.selectAll("myXaxis")
 					.attr("transform", "translate(0," + height + ")")
@@ -779,7 +777,7 @@
 			update_treemap("treemap_" + year + "_" + region + ".csv");
 		}
 
-		// Initialize plot
+		// Initialize plotupdate_bar_plot_stacked
 		update_histogram(
 			"2020",
 			"viagens_grupo_etario_Portugal.csv",
