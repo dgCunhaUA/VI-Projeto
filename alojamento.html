@@ -228,7 +228,7 @@
 					return d;
 				})
 				.attr("text-anchor", "left")
-				.attr("font-weight", "900")
+				.attr("font-weight", "600")
 				.style("alignment-baseline", "middle");
 		});
 
@@ -262,7 +262,7 @@
 			var Tooltip = d3
 				.select("body")
 				.append("div")
-				.style("opacity", 0)
+				.style("opacity", 1)
 				.attr("class", "tooltip")
 				.style("background-color", "white")
 				.style("border", "solid")
@@ -272,7 +272,7 @@
 				.attr("id", "map_tooltip");
 
 			let mouseOver = function (d) {
-				Tooltip.style("opacity", 1);
+				Tooltip.style("display", "");
 				d3.selectAll(".district").style("opacity", 0.5);
 				d3.select(this)
 					.style("opacity", 1)
@@ -283,7 +283,7 @@
 			};
 
 			let mouseLeave = function (d) {
-				Tooltip.style("opacity", 0);
+				Tooltip.style("display", "none");
 				d3.selectAll(".district").style("opacity", 0.8);
 				d3.select(this)
 					.style("stroke", "white")
@@ -332,7 +332,7 @@
 				.attr("class", function (d) {
 					return "district";
 				})
-				.style("opacity", 0.8)
+				.style("opacity", 1)
 				.on("mouseover", mouseOver)
 				.on("mouseleave", mouseLeave)
 				.on("mousemove", function (d) {
@@ -442,7 +442,7 @@
 					return d;
 				})
 				.attr("text-anchor", "left")
-				.attr("font-weight", "900")
+				.attr("font-weight", "600")
 				.style("alignment-baseline", "middle");
 
 			map_svg
@@ -462,7 +462,7 @@
 				Tooltip = d3.select("#map_tooltip");
 
 				let mouseOver = function (d) {
-					Tooltip.style("opacity", 1);
+					Tooltip.style("display", "");
 					d3.selectAll(".district").style("opacity", 0.5);
 					d3.select(this)
 						.style("opacity", 1)
@@ -474,8 +474,8 @@
 				};
 
 				let mouseLeave = function (d) {
-					Tooltip.style("opacity", 0);
-					d3.selectAll(".district").style("opacity", 0.8);
+					Tooltip.style("display", "none");
+					d3.selectAll(".district").style("opacity", 1);
 					d3.select(this)
 						.style("stroke", "white")
 						.style("stroke-width", "1px");
@@ -521,7 +521,7 @@
 					.attr("class", function (d) {
 						return "district";
 					})
-					.style("opacity", 0.8)
+					.style("opacity", 1)
 					.on("mouseover", mouseOver)
 					.on("mouseleave", mouseLeave)
 					.on("mousemove", function (d) {
