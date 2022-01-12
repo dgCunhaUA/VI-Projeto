@@ -38,8 +38,7 @@
 		<div class="container">
 			<div class="title">
 				<h1>
-					Proveitos com dormidas nos alojamentos turísticos: total e
-					por tipo de estabelecimento
+					Proveitos com dormidas nos alojamentos turísticos
 				</h1>
 			</div>
 			<div class="subtitle">
@@ -328,10 +327,10 @@
 			// Color scheme legend
 			// create a list of keys
 			var keys = [
-				"0 - 9999",
-				"10000 - 49999",
-				"40000 - 99999",
-				"100000+",
+				"0 - 9,999",
+				"10,000 - 49,999",
+				"40,000 - 99,999",
+				"100,000+",
 			];
 
 			// Usually you have a color scale in your chart already
@@ -397,7 +396,7 @@
 				Tooltip = d3.select("#map_tooltip");
 
 				let mouseOver = function (d) {
-					Tooltip.style("opacity", 1);
+					Tooltip.style("display", "");
 					d3.selectAll(".district").style("opacity", 0.5);
 					d3.select(this)
 						.style("opacity", 1)
@@ -409,8 +408,8 @@
 				};
 
 				let mouseLeave = function (d) {
-					Tooltip.style("opacity", 0);
-					d3.selectAll(".district").style("opacity", 0.8);
+					Tooltip.style("display", "none");
+					d3.selectAll(".district").style("opacity", 1);
 					d3.select(this)
 						.style("stroke", "white")
 						.style("stroke-width", "1px");
@@ -449,7 +448,7 @@
 					.attr("class", function (d) {
 						return "district";
 					})
-					.style("opacity", 0.8)
+					//.style("opacity", 0.8)
 					.on("mouseover", mouseOver)
 					.on("mouseleave", mouseLeave)
 					.on("mousemove", function (d) {

@@ -57,11 +57,17 @@
 						<option value="Portugal" selected>Portugal</option>
 						<option value="Norte">Norte</option>
 						<option value="Centro">Centro</option>
-						<option value="Lisboa">Área Metropolitana de Lisboa</option>
+						<option value="Lisboa">
+							Área Metropolitana de Lisboa
+						</option>
 						<option value="Alentejo">Alentejo</option>
 						<option value="Algarve">Algarve</option>
-						<option value="Açores">Região Autónoma dos Açores</option>
-						<option value="Madeira">Região Autónoma da Madeira</option>
+						<option value="Açores">
+							Região Autónoma dos Açores
+						</option>
+						<option value="Madeira">
+							Região Autónoma da Madeira
+						</option>
 					</select>
 				</div>
 			</div>
@@ -80,8 +86,8 @@
 				<div class="col-6">
 					<div class="subtitle">
 						<h4>
-							Qual a percentagem de turistas do pais que é
-							empregada, desempregada estudante ou reformada?
+							Qual a percentagem de turistas residentes que é
+							empregada, desempregada, estudante ou reformada?
 						</h4>
 					</div>
 				</div>
@@ -217,7 +223,6 @@
 					.range(["lightgreen", "darkgreen"]) // or use hex values
 					//.range(["lightsalmon", "orange"])
 					.domain([0, 80]);
-
 
 				// use this information to add rectangles:
 				treemap_svg
@@ -592,13 +597,19 @@
 				var mouseover = function (d) {
 					var subgroupName = d3.select(this.parentNode).datum().key;
 					var subgroupValue = d.data[subgroupName];
+					var total =
+						parseInt(d.data["Feminino"]) +
+						parseInt(d.data["Masculino"]);
 					tooltip
 						.html(
-							"subgroup: " +
+							"Genero: " +
 								subgroupName +
 								"<br>" +
-								"Value: " +
-								subgroupValue
+								"Valor: " +
+								subgroupValue +
+								"<br>" +
+								"Total: " +
+								total
 						)
 						.style("display", "");
 				};
